@@ -1,0 +1,31 @@
+{
+  "eClass": "http://www.emfjson.org/jackson/model#//PrimaryObject",
+  "featureMapReferenceType1": [
+    {
+      "$ref": "//@featureMapReferenceType2.0",
+      "eClass": "http://www.emfjson.org/jackson/model#//TargetObject"
+    },
+    {
+      "$ref": "//@featureMapReferenceType2.1",
+      "eClass": "http://www.emfjson.org/jackson/model#//TargetObject"
+    }
+  ],
+  "featureMapReferenceType2": [
+    {
+      "eClass": "http://www.emfjson.org/jackson/model#//TargetObject",
+      "singleAttribute": "1"
+    },
+    {
+      "eClass": "http://www.emfjson.org/jackson/model#//TargetObject",
+      "singleAttribute": "2"
+    },
+    {
+      "eClass": "http://www.emfjson.org/jackson/model#//TargetObject",
+      "singleAttribute": "3"
+    },
+    {
+      "eClass": "http://www.emfjson.org/jackson/model#//TargetObject",
+      "singleAttribute": "4"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "eClass": "http://www.emfjson.org/jackson/model#//ETypes",
+  "values": [
+    {
+      "key": {
+        "name": "t1"
+      },
+      "value": {
+        "value": 1
+      }
+    },
+    {
+      "key": {
+        "name": "t2"
+      },
+      "value": {
+        "value": 2
+      }
+    }
+  ]
+}

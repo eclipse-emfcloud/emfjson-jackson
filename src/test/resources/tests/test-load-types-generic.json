@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "eClass": "http://www.emfjson.org/jackson/generics#//SpecialTypeOne",
+      "value": "String"
+    },
+    {
+      "eClass": "http://www.emfjson.org/jackson/generics#//SpecialTypeTwo",
+      "value": true
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "elements": [
+    {
+      "eClass": "http://www.emfjson.org/jackson/model#//ConcreteTypeOne",
+      "name": "First",
+      "propTypeOne": "one",
+      "refProperty": [
+        {
+          "$ref": "Two"
+        }
+      ]
+    },
+    {
+      "eClass": "http://www.emfjson.org/jackson/model#//ConcreteTypeTwo",
+      "name": "Two",
+      "propTypeTwo": "two"
+    }
+  ]
+}

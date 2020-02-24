@@ -1,0 +1,12 @@
+[
+  {
+    "eClass": "http://www.emfjson.org/jackson/model#//User",
+    "userId": "2",
+    "name": "Pierre"
+  },
+  {
+    "eClass": "http://www.emfjson.org/jackson/model#//User",
+    "userId": "3",
+    "name": "Paul"
+  }
+]

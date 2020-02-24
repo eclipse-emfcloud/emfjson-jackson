@@ -1,0 +1,25 @@
+[
+  {
+    "eClass": "http://www.emfjson.org/jackson/model#//ETypes",
+    "valuesWithRef": [
+      {
+        "key": {
+          "eClass":"http://www.emfjson.org/jackson/model#//PrimaryObject",
+          "$ref": "/1"
+        },
+        "value": {
+          "eClass":"http://www.emfjson.org/jackson/model#//TargetObject",
+          "$ref": "/2"
+        }
+      }
+    ]
+  },
+  {
+    "eClass": "http://www.emfjson.org/jackson/model#//PrimaryObject",
+    "name": "p1"
+  },
+  {
+    "eClass": "http://www.emfjson.org/jackson/model#//TargetObject",
+    "singleAttribute": "t1"
+  }
+]

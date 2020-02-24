@@ -1,0 +1,102 @@
+@Ecore(nsURI="http://www.emfjson.org/jackson/annotations")
+@GenModel(
+    modelDirectory="emfjson-jackson/src/test/java-gen",
+    updateClasspath="false",
+    bundleManifest="false",
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl",
+    complianceLevel="8.0"
+)
+package org.emfjson.jackson.junit.annotations
+
+annotation "JsonIgnore" as JsonIgnore
+annotation "JsonProperty" as JsonProperty
+annotation "JsonIgnoreProperties" as JsonIgnoreProperties
+annotation "JsonType" as JsonType
+annotation "JsonIdentity" as JsonIdentity
+annotation "JsonAlias" as JsonAlias
+
+@JsonType(property = "@type")
+class TestA {
+
+	@JsonProperty(value = "my_value")
+	String value
+
+	contains TestC childOfTypeC
+	contains TestD[*] childrenOfTypeD
+}
+
+@JsonIdentity(property = "id", include = "true")
+class TestB {
+
+	@JsonProperty(value = "my_value")
+	String value
+
+	@JsonProperty
+	op String hello() {
+		"Hello"
+	}
+}
+
+@JsonType(include = "false")
+class TestC {
+	int value
+
+	contains TestC[*] manyValues
+	contains TestC oneValue
+}
+
+@JsonType(property = "@bar")
+class TestD extends TestC {
+	String name
+
+	contains TestD[*] values
+}
+
+@JsonType(property = "@foo")
+class TestE extends TestD {
+
+}
+
+class TestF {
+	@JsonAlias(value = "value")
+	@JsonProperty(value = "v")
+	String value
+
+	@JsonAlias(value = "foo, bar")
+	String otherValue
+}
+
+class Container {
+	contains TestTypeName[] typedByNames
+	contains TestTypeClass[] typedByClasses
+}
+
+@JsonType(
+	property = "@type",
+	use = "NAME"
+)
+class TestTypeName {
+	String value
+}
+
+class FooTypeName extends TestTypeName {
+}
+
+class BarTypeName extends TestTypeName {
+}
+
+@JsonType(
+	property = "_type",
+	use = "CLASS"
+)
+class TestTypeClass {
+	String value
+}
+
+class FooTypeClass extends TestTypeClass {
+
+}
+
+class BarTypeClass extends TestTypeClass {
+
+}

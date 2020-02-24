@@ -1,0 +1,193 @@
+@Ecore(nsURI="http://www.emfjson.org/jackson/model")
+@GenModel(
+    modelDirectory="emfjson-jackson/src/test/java-gen",
+    updateClasspath="false",
+    bundleManifest="false",
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl",
+    complianceLevel="8.0"
+)
+package org.emfjson.jackson.junit.model
+
+import org.eclipse.emf.ecore.EByteArray
+import org.eclipse.emf.ecore.EFeatureMapEntry
+import java.util.Map
+
+class User {
+	id String userId
+	String name
+	Date birthDate
+	Sex sex
+	refers local User[] friends
+	refers local User uniqueFriend
+	contains resolving Address address
+}
+
+enum Sex {
+	MALE = 0
+	FEMALE = 1
+}
+
+class Address {
+	id String addId
+	String city
+	String street
+	Integer number
+}
+
+class ETypes {
+	String eString
+	unique String[] eStrings
+	boolean eBoolean
+	unique Boolean[] eBooleans
+	int eInt
+	unique int[] eInts
+	Double doubleValue
+	double eDouble
+	unique Double[] eDoubles
+	BigDecimal eBigDecimal
+	BigInteger eBigInteger
+	byte eByte
+	EByteArray eByteArray
+	char eChar
+	Date eDate
+	float eFloat
+	long eLong
+	short eShort
+	ObjectType objectType
+	ObjectType[] objectTypeMany
+	ObjectArrayType objectArrayType
+	ObjectArrayType[] objectArrayTypeMany
+	contains TMap[*] values
+	contains TMapRef[*] valuesWithRef
+	contains StringMap[*] stringMapValues
+	contains DataTypeMap[*] dataTypeMapValues
+	unique URI[] uris
+}
+
+class StringMap wraps Map.Entry {
+	String key
+	contains Value value
+}
+
+class TMap wraps Map.Entry {
+	contains Type key
+	contains Value value 
+}
+
+class TMapRef wraps Map.Entry {
+	refers PrimaryObject key
+	refers TargetObject value
+}
+
+class Type {
+	String name
+}
+
+class Value {
+	int value
+}
+
+class DataTypeMap wraps Map.Entry {
+	UserType key
+	String value
+}
+
+type URI wraps org.eclipse.emf.common.util.URI
+type UserType wraps String
+type ObjectType wraps Object
+type ObjectArrayType wraps Object[]
+
+class PrimaryObject {
+	String name
+	id String idAttribute
+	SomeKind kind
+
+	unsettable String unsettableAttribute
+	unsettable String unsettableAttributeWithNonNullDefault = "junit"
+
+	refers unsettable TargetObject unsettableReference
+	refers TargetObject singleReference
+	refers TargetObject[] manyReferences opposite singleReference
+	refers local TargetObject singleReferenceNotResolveProxies
+	refers local TargetObject[] manyReferenceNotResolveProxies
+
+	contains resolving PrimaryObject containmentReferenceSameCollection
+	contains TargetObject singleContainmentReferenceNoProxies
+	contains TargetObject[] multipleContainmentReferenceNoProxies
+	contains resolving TargetObject singleContainmentReferenceProxies opposite singleReferenceNotResolveProxies
+	contains resolving TargetObject[] multipleContainmentReferenceProxies
+
+	@ExtendedMetaData(kind="group")
+	unique EFeatureMapEntry featureMapReferenceCollection
+
+	@ExtendedMetaData(group="#featureMapReferenceCollection")
+	refers local transient volatile derived TargetObject[] featureMapReferenceType1
+
+	@ExtendedMetaData(group="#featureMapReferenceCollection")
+	contains transient volatile derived TargetObject[] featureMapReferenceType2
+
+	@ExtendedMetaData(kind="group")
+	unique EFeatureMapEntry[] featureMapAttributeCollection
+
+	@ExtendedMetaData(group="#featureMapAttributeCollection")
+	unique transient volatile derived String[] featureMapAttributeType1
+
+	@ExtendedMetaData(group="#featureMapAttributeCollection")
+	unique transient volatile derived String[] featureMapAttributeType2
+}
+
+class Container {
+	contains resolving AbstractType[] elements
+}
+
+class TargetObject {
+	String singleAttribute
+	unique String[] arrayAttribute
+
+	refers PrimaryObject singleReference opposite manyReferences
+	refers PrimaryObject[] manyReferences
+	refers local PrimaryObject singleReferenceNotResolveProxies opposite singleContainmentReferenceProxies
+	refers local PrimaryObject[] manyReferencesNotResolveProxies
+}
+
+abstract class AbstractType {
+	id String[1] name
+	refers AbstractType[] refProperty
+}
+
+class ConcreteTypeOne extends AbstractType {
+	String propTypeOne
+}
+
+class ConcreteTypeTwo extends AbstractType {
+	String propTypeTwo
+}
+
+class Node {
+	String label
+	refers local Node target opposite source
+	refers local Node source opposite target
+	refers local Node[] manyRef
+	contains resolving Node[] child
+	contains resolving Node uniqueChild
+}
+
+enum SomeKind {
+	one = 0
+	Two as "two" = 1
+	Three as "Three-is-Three" = 3
+}
+
+abstract class AbstractNode {
+	String label
+
+	contains AbstractNode[] child opposite parent
+	contains resolving AbstractNode[] childResolving opposite parentResolving
+
+	refers AbstractNode parent opposite child
+	refers AbstractNode parentResolving opposite childResolving
+}
+
+class PhysicalNode extends AbstractNode {}
+
+class VirtualNode extends AbstractNode {}
