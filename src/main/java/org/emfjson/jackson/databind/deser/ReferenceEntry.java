@@ -30,10 +30,10 @@ public interface ReferenceEntry {
 
 	class Base implements ReferenceEntry {
 
-		private final EObject owner;
-		private final EReference reference;
-		private final String id;
-		private final String type;
+		protected final EObject owner;
+		protected final EReference reference;
+		protected final String id;
+		protected final String type;
 
 		public Base(EObject owner, EReference reference, String id) {
 			this(owner, reference, id, null);
@@ -82,7 +82,7 @@ public interface ReferenceEntry {
 			}
 		}
 
-		private EObject createProxy(ResourceSet resourceSet, URI uri) {
+		protected EObject createProxy(ResourceSet resourceSet, URI uri) {
 			EClass eClass;
 			try {
 				eClass = (EClass) resourceSet.getEObject(URI.createURI(type), true);

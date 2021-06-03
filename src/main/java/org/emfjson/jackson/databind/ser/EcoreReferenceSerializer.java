@@ -28,9 +28,9 @@ import java.io.IOException;
 
 public class EcoreReferenceSerializer extends JsonSerializer<EObject> {
 
-	private final EcoreReferenceInfo info;
-	private final EcoreTypeInfo typeInfo;
-	private final URIHandler handler;
+	protected final EcoreReferenceInfo info;
+	protected final EcoreTypeInfo typeInfo;
+	protected final URIHandler handler;
 
 	public EcoreReferenceSerializer(EcoreReferenceInfo info, EcoreTypeInfo typeInfo) {
 		this.info = info;
@@ -44,7 +44,7 @@ public class EcoreReferenceSerializer extends JsonSerializer<EObject> {
 		final String href = getHRef(serializers, parent, value);
 
 		jg.writeStartObject();
-		jg.writeStringField(typeInfo.getProperty(), typeInfo.getValueWriter().writeValue(value.eClass(), serializers));
+		jg.writeStringField(typeInfo.getProperty(), typeInfo.getValueWriter().writeValue(value, value.eClass(), serializers));
 		if (href == null) {
 			jg.writeNullField(info.getProperty());
 		} else {
@@ -67,7 +67,7 @@ public class EcoreReferenceSerializer extends JsonSerializer<EObject> {
 		return sourceResource == null || sourceResource != EMFContext.getResource(ctxt, target);
 	}
 
-	private String getHRef(SerializerProvider ctxt, EObject parent, EObject value) {
+	protected String getHRef(SerializerProvider ctxt, EObject parent, EObject value) {
 		if (isExternal(ctxt, parent, value)) {
 
 			URI targetURI = EMFContext.getURI(ctxt, value);

@@ -11,8 +11,14 @@
  */
 package org.emfjson.jackson.utils;
 
+import org.eclipse.emf.ecore.EObject;
+
 import com.fasterxml.jackson.databind.DeserializationContext;
 
 public interface ValueReader<V, T> {
 	T readValue(V value, DeserializationContext context);
+	
+	default T readValue(EObject eObject, V value, DeserializationContext context) {
+		return readValue(value, context);
+	}
 }

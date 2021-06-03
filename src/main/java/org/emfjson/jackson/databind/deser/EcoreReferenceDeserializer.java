@@ -25,8 +25,8 @@ import java.io.IOException;
 
 public class EcoreReferenceDeserializer extends JsonDeserializer<ReferenceEntry> {
 
-	private final EcoreReferenceInfo info;
-	private final EcoreTypeInfo typeInfo;
+	protected final EcoreReferenceInfo info;
+	protected final EcoreTypeInfo typeInfo;
 
 	public EcoreReferenceDeserializer(EcoreReferenceInfo info, EcoreTypeInfo typeInfo) {
 		this.typeInfo = typeInfo;

@@ -39,7 +39,7 @@ public class EObjectIdentityProperty extends EObjectProperty {
 	}
 
 	public void serialize(EObject bean, JsonGenerator jg, SerializerProvider provider) throws IOException {
-		jg.writeObjectField(getFieldName(), valueWriter.writeValue(bean, provider));
+		jg.writeObjectField(getFieldName(), valueWriter.writeValue(bean, bean, provider));
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class EObjectIdentityProperty extends EObjectProperty {
 		}
 
 		if (value != null) {
-			String id = valueReader.readValue(value, ctxt);
+			String id = valueReader.readValue(current, value, ctxt);
 			if (resource instanceof JsonResource && id != null) {
 				((JsonResource) resource).setID(current, id);
 			}

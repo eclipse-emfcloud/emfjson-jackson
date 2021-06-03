@@ -11,8 +11,14 @@
  */
 package org.emfjson.jackson.utils;
 
+import org.eclipse.emf.ecore.EObject;
+
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 public interface ValueWriter<T, V> {
 	V writeValue(T value, SerializerProvider context);
+	
+	default V writeValue(EObject eObject, T value, SerializerProvider context) {
+		return writeValue(value, context);
+	}
 }

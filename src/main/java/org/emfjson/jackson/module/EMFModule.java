@@ -23,10 +23,13 @@ import org.emfjson.jackson.annotations.EcoreIdentityInfo;
 import org.emfjson.jackson.annotations.EcoreReferenceInfo;
 import org.emfjson.jackson.annotations.EcoreTypeInfo;
 import org.emfjson.jackson.databind.deser.EMFDeserializers;
+import org.emfjson.jackson.databind.deser.EObjectDeserializer;
 import org.emfjson.jackson.databind.deser.EcoreReferenceDeserializer;
 import org.emfjson.jackson.databind.deser.ReferenceEntry;
 import org.emfjson.jackson.databind.ser.EMFSerializers;
+import org.emfjson.jackson.databind.ser.EObjectSerializer;
 import org.emfjson.jackson.databind.ser.EcoreReferenceSerializer;
+import org.emfjson.jackson.databind.ser.EnumeratorSerializer;
 import org.emfjson.jackson.handlers.BaseURIHandler;
 import org.emfjson.jackson.handlers.URIHandler;
 
@@ -47,7 +50,11 @@ public class EMFModule extends SimpleModule {
 	private EcoreIdentityInfo identityInfo;
 
 	private JsonSerializer<EObject> referenceSerializer;
+	private JsonSerializer<?> enumeratorSerializer;
 	private JsonDeserializer<ReferenceEntry> referenceDeserializer;
+
+	private Class<? extends EObjectSerializer> eObjectSerializerClass = EObjectSerializer.class;
+	private Class<? extends EObjectDeserializer> eObjectDeserializerClass = EObjectDeserializer.class;
 
 	public void setTypeInfo(EcoreTypeInfo info) {
 		this.typeInfo = info;
@@ -59,6 +66,14 @@ public class EMFModule extends SimpleModule {
 
 	public void setReferenceInfo(EcoreReferenceInfo referenceInfo) {
 		this.referenceInfo = referenceInfo;
+	}
+
+	public void setEnumeratorSerializer(JsonSerializer<?> serializer) {
+		this.enumeratorSerializer = serializer;
+	}
+
+	public JsonSerializer<?> getEnumeratorSerializer() {
+		return enumeratorSerializer;
 	}
 
 	public void setReferenceSerializer(JsonSerializer<EObject> serializer) {
@@ -75,6 +90,22 @@ public class EMFModule extends SimpleModule {
 
 	public JsonDeserializer<ReferenceEntry> getReferenceDeserializer() {
 		return referenceDeserializer;
+	}
+
+	public void setEObjectSerializerClass(Class<? extends EObjectSerializer> eObjectSerializerClass) {
+		this.eObjectSerializerClass = eObjectSerializerClass;
+	}
+
+	public Class<? extends EObjectSerializer> getEObjectSerializerClass() {
+		return eObjectSerializerClass;
+	}
+
+	public void setEObjectDeserializerClass(Class<? extends EObjectDeserializer> eObjectDeserializerClass) {
+		this.eObjectDeserializerClass = eObjectDeserializerClass;
+	}
+
+	public Class<? extends EObjectDeserializer> getEObjectDeserializerClass() {
+		return eObjectDeserializerClass;
 	}
 
 	/**
@@ -194,6 +225,10 @@ public class EMFModule extends SimpleModule {
 			referenceInfo = new EcoreReferenceInfo(handler);
 		}
 
+		if (enumeratorSerializer == null) {
+			enumeratorSerializer = new EnumeratorSerializer();
+		}
+		
 		if (referenceSerializer == null) {
 			referenceSerializer = new EcoreReferenceSerializer(referenceInfo, typeInfo);
 		}
