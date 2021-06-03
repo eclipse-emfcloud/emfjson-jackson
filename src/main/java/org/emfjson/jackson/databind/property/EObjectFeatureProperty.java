@@ -59,37 +59,37 @@ public class EObjectFeatureProperty extends EObjectProperty {
 			return;
 		}
 
-		switch (FeatureKind.get(feature)) {
+		switch (FeatureKind.get(getFeature())) {
 			case MAP:
 			case MANY_CONTAINMENT:
 			case SINGLE_CONTAINMENT: {
-				EMFContext.setFeature(ctxt, feature);
+				EMFContext.setFeature(ctxt, getFeature());
 				EMFContext.setParent(ctxt, current);
 			}
 			case SINGLE_ATTRIBUTE:
 			case MANY_ATTRIBUTE: {
-				if (feature.getEType() instanceof EDataType) {
-					EMFContext.setDataType(ctxt, feature.getEType());
+				if (getFeature().getEType() instanceof EDataType) {
+					EMFContext.setDataType(ctxt, getFeature().getEType());
 				}
 
-				if (feature.isMany()) {
-					deserializer.deserialize(jp, ctxt, current.eGet(feature));
+				if (getFeature().isMany()) {
+					deserializer.deserialize(jp, ctxt, current.eGet(getFeature()));
 				} else {
 					Object value = deserializer.deserialize(jp, ctxt);
 
 					if (value != null) {
-						current.eSet(feature, value);
+						current.eSet(getFeature(), value);
 					}
 				}
 			}
 			break;
 			case MANY_REFERENCE:
 			case SINGLE_REFERENCE: {
-				EMFContext.setFeature(ctxt, feature);
+				EMFContext.setFeature(ctxt, getFeature());
 				EMFContext.setParent(ctxt, current);
 
 				ReferenceEntries entries = EMFContext.getEntries(ctxt);
-				if (feature.isMany()) {
+				if (getFeature().isMany()) {
 					deserializer.deserialize(jp, ctxt, entries.entries());
 				} else {
 					Object value = deserializer.deserialize(jp, ctxt);
@@ -109,10 +109,10 @@ public class EObjectFeatureProperty extends EObjectProperty {
 		}
 
 		EMFContext.setParent(provider, bean);
-		EMFContext.setFeature(provider, feature);
+		EMFContext.setFeature(provider, getFeature());
 
-		if (bean.eIsSet(feature)) {
-			Object value = bean.eGet(feature, false);
+		if (bean.eIsSet(getFeature())) {
+			Object value = bean.eGet(getFeature(), false);
 
 			jg.writeFieldName(getFieldName());
 
@@ -125,7 +125,7 @@ public class EObjectFeatureProperty extends EObjectProperty {
 				serializer.serialize(value, jg, provider);
 			}
 		} else if (defaultValues) {
-			Object value = feature.getDefaultValue();
+			Object value = getFeature().getDefaultValue();
 
 			if (value != null) {
 				jg.writeFieldName(getFieldName());
@@ -137,5 +137,9 @@ public class EObjectFeatureProperty extends EObjectProperty {
 	@Override
 	public EObject deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
 		return null;
+	}
+
+	public EStructuralFeature getFeature() {
+		return feature;
 	}
 }

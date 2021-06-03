@@ -37,8 +37,8 @@ import static org.emfjson.jackson.databind.EMFContext.getResource;
 
 public class EObjectDeserializer extends JsonDeserializer<EObject> {
 
-	private final EObjectPropertyMap.Builder builder;
-	private final Class<?> currentType;
+	protected final EObjectPropertyMap.Builder builder;
+	protected final Class<?> currentType;
 
 	public EObjectDeserializer(EObjectPropertyMap.Builder builder, Class<?> currentType) {
 		this.builder = builder;
@@ -78,7 +78,7 @@ public class EObjectDeserializer extends JsonDeserializer<EObject> {
 			} else if (property != null && current != null) {
 				property.deserializeAndSet(jp, current, ctxt, resource);
 			} else if (property == null && current != null) {
-				handleUnknownProperty(jp, resource, ctxt);
+				handleUnknownProperty(jp, current, ctxt, resource);
 			} else {
 				if (buffer == null) {
 					buffer = new TokenBuffer(jp);
@@ -114,14 +114,14 @@ public class EObjectDeserializer extends JsonDeserializer<EObject> {
 			if (property != null) {
 				property.deserializeAndSet(jp, intoValue, ctxt, resource);
 			} else {
-				handleUnknownProperty(jp, resource, ctxt);
+				handleUnknownProperty(jp, intoValue, ctxt, resource);
 			}
 		}
 
 		return intoValue;
 	}
 
-	private EObject postDeserialize(TokenBuffer buffer, EObject object, EClass defaultType, DeserializationContext ctxt) throws IOException {
+	protected EObject postDeserialize(TokenBuffer buffer, EObject object, EClass defaultType, DeserializationContext ctxt) throws IOException {
 		if (object == null && defaultType == null) {
 			return null;
 		}
@@ -158,7 +158,7 @@ public class EObjectDeserializer extends JsonDeserializer<EObject> {
 			if (property != null) {
 				property.deserializeAndSet(jp, object, ctxt, resource);
 			} else {
-				handleUnknownProperty(jp, resource, ctxt);
+				handleUnknownProperty(jp, object, ctxt, resource);
 			}
 
 			nextToken = jp.nextToken();
@@ -169,7 +169,7 @@ public class EObjectDeserializer extends JsonDeserializer<EObject> {
 		return object;
 	}
 
-	private void handleUnknownProperty(JsonParser jp, Resource resource, DeserializationContext ctxt) throws IOException {
+	protected void handleUnknownProperty(JsonParser jp, EObject current, DeserializationContext ctxt, Resource resource) throws IOException {
 		if (resource != null && ctxt.getConfig().hasDeserializationFeatures(FAIL_ON_UNKNOWN_PROPERTIES.getMask())) {
 			resource.getErrors().add(new JSONException("Unknown feature " + jp.getCurrentName(), jp.getCurrentLocation()));
 		}
@@ -189,7 +189,7 @@ public class EObjectDeserializer extends JsonDeserializer<EObject> {
 		return EObject.class;
 	}
 
-	private EClass getDefaultType(DeserializationContext ctxt) {
+	protected EClass getDefaultType(DeserializationContext ctxt) {
 		EClass type = null;
 
 		EObject parent = EMFContext.getParent(ctxt);

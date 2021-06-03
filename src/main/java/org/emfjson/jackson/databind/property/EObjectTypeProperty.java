@@ -59,7 +59,7 @@ public class EObjectTypeProperty extends EObjectProperty {
 		EReference containment = bean.eContainmentFeature();
 
 		if (isRoot(bean) || shouldSaveType(objectType, containment.getEReferenceType(), containment)) {
-			String value = valueWriter.writeValue(bean.eClass(), provider);
+			String value = valueWriter.writeValue(bean, bean.eClass(), provider);
 
 			jg.writeFieldName(getFieldName());
 			serializer.serialize(value, jg, provider);

@@ -25,8 +25,8 @@ import static org.emfjson.jackson.databind.EMFContext.getParent;
 
 public class EObjectSerializer extends JsonSerializer<EObject> {
 
-	private final JsonSerializer<EObject> refSerializer;
-	private final EObjectPropertyMap.Builder builder;
+	protected final JsonSerializer<EObject> refSerializer;
+	protected final EObjectPropertyMap.Builder builder;
 
 	public EObjectSerializer(EObjectPropertyMap.Builder builder, JsonSerializer<EObject> serializer) {
 		this.builder = builder;

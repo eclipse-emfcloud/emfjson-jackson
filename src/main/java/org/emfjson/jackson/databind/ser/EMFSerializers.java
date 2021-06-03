@@ -20,6 +20,9 @@ import com.fasterxml.jackson.databind.ser.Serializers;
 import com.fasterxml.jackson.databind.ser.std.CollectionSerializer;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.MapLikeType;
+
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.emf.ecore.EObject;
@@ -37,11 +40,14 @@ public class EMFSerializers extends Serializers.Base {
 	private final JsonSerializer<Resource> _resourceSerializer = new ResourceSerializer();
 	private final JsonSerializer<?> _dataTypeSerializer = new EDataTypeSerializer();
 	private final JsonSerializer<?> _mapSerializer = new EMapStringSerializer();
-	private final JsonSerializer<?> _enumeratorSerializer = new EnumeratorSerializer();
+	private final JsonSerializer<?> _enumeratorSerializer;
+	private final Class<? extends EObjectSerializer> _eObjectSerializerClass;
 
 	public EMFSerializers(EMFModule module) {
 		this.propertiesBuilder = EObjectPropertyMap.Builder.from(module, module.getFeatures());
 		this._referenceSerializer = module.getReferenceSerializer();
+		this._enumeratorSerializer = module.getEnumeratorSerializer();
+		this._eObjectSerializerClass = module.getEObjectSerializerClass();
 	}
 
 	@Override
@@ -84,10 +90,21 @@ public class EMFSerializers extends Serializers.Base {
 		}
 
 		if (type.isTypeOrSubTypeOf(EObject.class)) {
-			return new EObjectSerializer(propertiesBuilder, _referenceSerializer);
+			return getEObjectSerializer(propertiesBuilder, _referenceSerializer);
 		}
 
 		return super.findSerializer(config, type, beanDesc);
 	}
 
+	private EObjectSerializer getEObjectSerializer(EObjectPropertyMap.Builder builder, JsonSerializer<EObject> serializer) {
+		try {
+			return _eObjectSerializerClass.getConstructor(EObjectPropertyMap.Builder.class, JsonSerializer.class)
+					.newInstance(builder, serializer);
+		} 
+		catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

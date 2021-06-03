@@ -25,6 +25,7 @@ import org.emfjson.jackson.databind.property.EObjectPropertyMap;
 import org.emfjson.jackson.databind.type.EcoreType;
 import org.emfjson.jackson.module.EMFModule;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class EMFDeserializers extends Deserializers.Base {
@@ -33,6 +34,7 @@ public class EMFDeserializers extends Deserializers.Base {
 	private final JsonDeserializer<EList<Map.Entry<?, ?>>> _mapDeserializer;
 	private final JsonDeserializer<Object> _dataTypeDeserializer;
 	private final JsonDeserializer<ReferenceEntry> _referenceDeserializer;
+	private final Class<? extends EObjectDeserializer> _eObjectDeserializerClass;
 	private final EObjectPropertyMap.Builder builder;
 
 	public EMFDeserializers(EMFModule module) {
@@ -43,6 +45,7 @@ public class EMFDeserializers extends Deserializers.Base {
 				module.getFeatures());
 		this._resourceDeserializer = new ResourceDeserializer(module.getUriHandler());
 		this._referenceDeserializer = module.getReferenceDeserializer();
+		this._eObjectDeserializerClass = module.getEObjectDeserializerClass();
 		this._mapDeserializer = new EMapDeserializer();
 		this._dataTypeDeserializer = new EDataTypeDeserializer();
 	}
@@ -77,7 +80,7 @@ public class EMFDeserializers extends Deserializers.Base {
 														  TypeDeserializer elementTypeDeserializer,
 														  JsonDeserializer<?> elementDeserializer) throws JsonMappingException {
 		if (type.getContentType().isTypeOrSubTypeOf(EObject.class)) {
-			return new CollectionDeserializer(type, new EObjectDeserializer(builder, type.getContentType().getRawClass()), _referenceDeserializer);
+			return new CollectionDeserializer(type, getEObjectDeserializer(builder, type.getContentType().getRawClass()), _referenceDeserializer);
 		}
 		return super.findCollectionDeserializer(type, config, beanDesc, elementTypeDeserializer, elementDeserializer);
 	}
@@ -97,9 +100,21 @@ public class EMFDeserializers extends Deserializers.Base {
 		}
 
 		if (type.isTypeOrSubTypeOf(EObject.class)) {
-			return new EObjectDeserializer(builder, type.getRawClass());
+			return getEObjectDeserializer(builder, type.getRawClass());
 		}
 
 		return super.findBeanDeserializer(type, config, beanDesc);
+	}
+	
+	private EObjectDeserializer getEObjectDeserializer(EObjectPropertyMap.Builder builder, Class<?> currentType) {
+		try {
+			return _eObjectDeserializerClass.getConstructor(EObjectPropertyMap.Builder.class, Class.class)
+					.newInstance(builder, currentType);
+		} 
+		catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
