@@ -17,7 +17,7 @@ public interface EcoreType {
 	interface DataType {
 	}
 
-	interface ReferenceType {
+	interface ReferenceType<V> {
 	}
 
 }
