@@ -84,9 +84,6 @@ public class EcoreTypeFactory {
 
 	private JavaType typeOf(TypeFactory factory, FeatureKind kind, EClassifier type) {
 		switch (kind) {
-			case SINGLE_ATTRIBUTE:
-			case SINGLE_CONTAINMENT:
-				return constructSimpleType(factory, type);
 			case SINGLE_REFERENCE:
 				return constructReferenceType(factory, type);
 			case MANY_ATTRIBUTE:
@@ -108,7 +105,7 @@ public class EcoreTypeFactory {
 	JavaType constructReferenceType(TypeFactory factory, EClassifier type) {
 		Class<?> rawType = rawType(type);
 
-		return factory.constructReferenceType(rawType, factory.constructType(EcoreType.ReferenceType.class));
+		return factory.constructReferenceType(EcoreType.ReferenceType.class, factory.constructType(rawType));
 	}
 
 	JavaType constructCollectionType(TypeFactory factory, JavaType type) {

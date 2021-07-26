@@ -11,11 +11,17 @@
  */
 package org.emfjson.jackson.databind.deser;
 
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.BeanDescription;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.KeyDeserializer;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.MapLikeType;
+import com.fasterxml.jackson.databind.type.ReferenceType;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.Enumerator;
@@ -83,7 +89,21 @@ public class EMFDeserializers extends Deserializers.Base {
 	}
 
 	@Override
-	public JsonDeserializer<?> findBeanDeserializer(JavaType type, DeserializationConfig config, BeanDescription beanDesc) throws JsonMappingException {
+	public JsonDeserializer<?> findReferenceDeserializer(ReferenceType refType,
+														 DeserializationConfig config,
+														 BeanDescription beanDesc,
+														 TypeDeserializer contentTypeDeserializer,
+														 JsonDeserializer<?> contentDeserializer) throws JsonMappingException {
+		if (_referenceDeserializer != null) {
+			return _referenceDeserializer;
+		}
+		return super.findReferenceDeserializer(refType, config, beanDesc, contentTypeDeserializer, contentDeserializer);
+	}
+
+	@Override
+	public JsonDeserializer<?> findBeanDeserializer(JavaType type,
+													DeserializationConfig config,
+													BeanDescription beanDesc) throws JsonMappingException {
 		if (type.isTypeOrSubTypeOf(Resource.class)) {
 			return _resourceDeserializer;
 		}
