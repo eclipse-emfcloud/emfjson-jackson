@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+    <bundle id="org.eclipse.emfcloud.emfjson-jackson" version="0.0.0">
+        <category name="org.eclipse.emfcloud"/>
+    </bundle>
+    <bundle id="org.eclipse.emfcloud.emfjson-jackson.source" version="0.0.0">
+        <category name="org.eclipse.emfcloud.sdk"/>
+    </bundle>
+    <bundle id="com.fasterxml.jackson.core.jackson-annotations" version="0.0.0">
+        <category name="com.fasterxml.jackson"/>
+    </bundle>
+    <bundle id="com.fasterxml.jackson.core.jackson-annotations.source" version="0.0.0">
+        <category name="com.fasterxml.jackson.sdk"/>
+    </bundle>
+    <bundle id="com.fasterxml.jackson.core.jackson-core" version="0.0.0">
+        <category name="com.fasterxml.jackson"/>
+    </bundle>
+    <bundle id="com.fasterxml.jackson.core.jackson-core.source" version="0.0.0">
+        <category name="com.fasterxml.jackson.sdk"/>
+    </bundle>
+    <bundle id="com.fasterxml.jackson.core.jackson-databind" version="0.0.0">
+        <category name="com.fasterxml.jackson"/>
+    </bundle>
+    <bundle id="com.fasterxml.jackson.core.jackson-databind.source" version="0.0.0">
+        <category name="com.fasterxml.jackson.sdk"/>
+    </bundle>
+    <category-def name="org.eclipse.emfcloud" label="emfjson bundles"/>
+    <category-def name="org.eclipse.emfcloud.sdk" label="emfjson SDK"/>
+    <category-def name="com.fasterxml.jackson" label="Jackson bundles"/>
+    <category-def name="com.fasterxml.jackson.sdk" label="Jackson SDK"/>
+</site>

@@ -10,7 +10,7 @@
 	property = "@type",
 	use = "NAME"
 )
-package org.emfjson.jackson.junit.packageAnnotations
+package org.eclipse.emfcloud.jackson.junit.packageAnnotations
 
 annotation "JsonType" as JsonType
 

@@ -29,19 +29,19 @@ Builds are available for Maven users and Eclipse Plugins users.
 
 ### Maven
 
-Add the following dependency yo your POM file to use emfjson-jackson.
+Add the following dependency to your POM file to use emfjson-jackson.
 
 ```xml
 <dependency>
-	<groupId>org.emfjson</groupId>
+	<groupId>org.eclipse.emfcloud</groupId>
 	<artifactId>emfjson-jackson</artifactId>
-	<version>1.2.0</version>
+	<version>1.3.1</version>
 </dependency>
 ```
 
 ### Eclipse Update Manager
 
-Use this update site [http://ghillairet.github.io/p2](http://ghillairet.github.io/p2)
+Use this update site [https://download.eclipse.org/emfcloud/emfjson-jackson/p2/nightly/](https://download.eclipse.org/emfcloud/emfjson-jackson/p2/nightly/)
 
 This update site contains the bundle and feature for emfjson-jackson and Jackson. 
 
