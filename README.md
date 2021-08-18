@@ -19,9 +19,10 @@ This is how a model looks like in JSON format.
 }
 ```
 
-## Documentation
+## Documentation and Support
+You can find documentation on our [wiki page](https://github.com/eclipse-emfcloud/emfjson-jackson/wiki).
 
-[Here](https://emfjson.github.io)
+If you have questions, contact us on our [discussion page](https://github.com/eclipse-emfcloud/emfcloud/discussions). 
 
 ## Installation
 
