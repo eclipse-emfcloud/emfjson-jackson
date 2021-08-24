@@ -1,4 +1,4 @@
-[EMF](http://www.eclipse.org/emf) Binding for JSON. [![CircleCI](https://circleci.com/gh/emfjson/emfjson-jackson.svg?style=svg)](https://circleci.com/gh/emfjson/emfjson-jackson)
+# [EMF](http://www.eclipse.org/emf) Binding for JSON [![build-status](https://img.shields.io/jenkins/build?jobUrl=https://ci.eclipse.org/emfcloud/job/eclipse-emfcloud/job/emfjson-jackson/job/master/)](https://ci.eclipse.org/emfcloud/job/eclipse-emfcloud/job/emfjson-jackson/job/master/)
 
 JSON binding for EMF (Eclipse Modeling Framework) models, that allows serialization and deserialization of EMF Resources in JSON.
 
@@ -28,7 +28,7 @@ If you have questions, contact us on our [discussion page](https://github.com/ec
 
 Builds are available for Maven users and Eclipse Plugins users.
 
-### Maven
+### Maven  [![m2-deploy-status](https://img.shields.io/jenkins/build?jobUrl=https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-m2&label=publish)](https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-m2/)
 
 Add the following dependency to your POM file to use emfjson-jackson.
 
@@ -39,26 +39,21 @@ Add the following dependency to your POM file to use emfjson-jackson.
 	<version>1.3.1</version>
 </dependency>
 ```
+You can download the jars from [Maven Central](http://search.maven.org/#search|ga|1|emfjson)
+or use our [Snapshot Repository](https://download.eclipse.org/emfcloud/emf-json).
 
-### Eclipse Update Manager
+
+### Eclipse Update Manager [![p2-deploy-status](https://img.shields.io/jenkins/build?jobUrl=https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-p2&label=publish)](https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-p2/)
 
 Use this update site [https://download.eclipse.org/emfcloud/emfjson-jackson/p2/nightly/](https://download.eclipse.org/emfcloud/emfjson-jackson/p2/nightly/)
 
 This update site contains the bundle and feature for emfjson-jackson and Jackson. 
-
-### Jars
-
-You can download the jars from [Maven Central](http://search.maven.org/#search|ga|1|emfjson).
 
 ## Dependencies
 
 * Java 8
 * EMF 2.19
 * Jackson 2.10
-
-## License
-
-This software is distributed under the terms of the Eclipse Public License 1.0 - http://www.eclipse.org/legal/epl-v10.
 
 # Development
 
