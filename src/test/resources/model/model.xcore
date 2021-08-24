@@ -6,7 +6,7 @@
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl",
     complianceLevel="8.0"
 )
-package org.emfjson.jackson.junit.model
+package org.eclipse.emfcloud.jackson.junit.model
 
 import org.eclipse.emf.ecore.EByteArray
 import org.eclipse.emf.ecore.EFeatureMapEntry
