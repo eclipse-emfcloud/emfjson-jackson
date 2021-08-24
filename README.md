@@ -1,4 +1,4 @@
-[EMF](http://www.eclipse.org/emf) Binding for JSON. [![CircleCI](https://circleci.com/gh/emfjson/emfjson-jackson.svg?style=svg)](https://circleci.com/gh/emfjson/emfjson-jackson)
+# [EMF](http://www.eclipse.org/emf) Binding for JSON [![build-status](https://img.shields.io/jenkins/build?jobUrl=https://ci.eclipse.org/emfcloud/job/eclipse-emfcloud/job/emfjson-jackson/job/master/)](https://ci.eclipse.org/emfcloud/job/eclipse-emfcloud/job/emfjson-jackson/job/master/)
 
 JSON binding for EMF (Eclipse Modeling Framework) models, that allows serialization and deserialization of EMF Resources in JSON.
 
@@ -28,7 +28,7 @@ If you have questions, contact us on our [discussion page](https://github.com/ec
 
 Builds are available for Maven users and Eclipse Plugins users.
 
-### Maven
+### Maven  [![p2-deploy-status](https://img.shields.io/jenkins/build?jobUrl=https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-m2&label=publish)](https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-m2/)
 
 Add the following dependency to your POM file to use emfjson-jackson.
 
@@ -40,7 +40,7 @@ Add the following dependency to your POM file to use emfjson-jackson.
 </dependency>
 ```
 
-### Eclipse Update Manager
+### Eclipse Update Manager [![p2-deploy-status](https://img.shields.io/jenkins/build?jobUrl=https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-p2&label=publish)](https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-p2/)
 
 Use this update site [https://download.eclipse.org/emfcloud/emfjson-jackson/p2/nightly/](https://download.eclipse.org/emfcloud/emfjson-jackson/p2/nightly/)
 
