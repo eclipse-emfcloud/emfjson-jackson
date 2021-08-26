@@ -1,5 +1,9 @@
 # [EMF](http://www.eclipse.org/emf) Binding for JSON [![build-status](https://img.shields.io/jenkins/build?jobUrl=https://ci.eclipse.org/emfcloud/job/eclipse-emfcloud/job/emfjson-jackson/job/master/)](https://ci.eclipse.org/emfcloud/job/eclipse-emfcloud/job/emfjson-jackson/job/master/)
 
+## IMPORTANT
+Due to the move to eclipse the bundle name for p2 bundles as well as the groupId and artfactId for Maven changed! Also the package names changed.
+---
+
 JSON binding for EMF (Eclipse Modeling Framework) models, that allows serialization and deserialization of EMF Resources in JSON.
 
 This is how a model looks like in JSON format.
