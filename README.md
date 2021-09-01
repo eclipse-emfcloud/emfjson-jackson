@@ -43,7 +43,7 @@ Add the following dependency to your POM file to use emfjson-jackson.
 	<version>1.3.1</version>
 </dependency>
 ```
-You can download the jars from [Maven Central](https://search.maven.org/search?q=org.eclipse.emfcloud%20emfjson)
+You can download the releases from [Maven Central](https://search.maven.org/search?q=org.eclipse.emfcloud%20emfjson) (note that there are currently releases yet)
 or use our [Snapshot Repository](https://oss.sonatype.org/content/repositories/snapshots/org/eclipse/emfcloud/emfjson-jackson/).
 
 Note: If you want to consume the nightly builds you have to configure the sonatype snapshot repository in your `pom.xml`:
