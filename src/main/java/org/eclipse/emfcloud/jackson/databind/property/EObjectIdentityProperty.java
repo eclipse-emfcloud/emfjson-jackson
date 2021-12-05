@@ -50,6 +50,7 @@ public class EObjectIdentityProperty extends EObjectProperty {
    }
 
    @Override
+   @SuppressWarnings("checkstyle:cyclomaticComplexity")
    public void deserializeAndSet(final JsonParser jp, final EObject current, final DeserializationContext ctxt,
       final Resource resource)
       throws IOException {

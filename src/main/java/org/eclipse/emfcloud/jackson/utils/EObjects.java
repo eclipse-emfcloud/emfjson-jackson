@@ -26,7 +26,9 @@ import com.fasterxml.jackson.databind.DatabindContext;
 /**
  * Utility class to facilitate access or modification of eObjects.
  */
-public class EObjects {
+public final class EObjects {
+
+   private EObjects() {}
 
    /**
     * Set or add a value to an object reference. The value must be
@@ -86,16 +88,13 @@ public class EObjects {
 
          return entry;
 
-      } else {
-
-         final BasicEMapEntry entry = new BasicEMapEntry<>();
-         entry.eSetClass(type);
-         entry.setKey(key);
-         entry.setValue(value);
-
-         return entry;
-
       }
+      final BasicEMapEntry entry = new BasicEMapEntry<>();
+      entry.eSetClass(type);
+      entry.setKey(key);
+      entry.setValue(value);
+
+      return entry;
    }
 
 }

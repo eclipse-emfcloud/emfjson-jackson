@@ -52,7 +52,7 @@ import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
 
-public class EObjectPropertyMap {
+public final class EObjectPropertyMap {
 
    public static class Builder {
 
@@ -104,6 +104,7 @@ public class EObjectPropertyMap {
          types.forEach(type -> cache.put(type, construct(ctxt, type)));
       }
 
+      @SuppressWarnings("checkstyle:cyclomaticComplexity")
       private EObjectPropertyMap createPropertyMap(final DatabindContext ctxt, final EClass type) {
          EcoreTypeFactory factory = EMFContext.getTypeFactory(ctxt);
          HashMap<String, EObjectProperty> propertiesMap = new HashMap<>();
@@ -166,9 +167,8 @@ public class EObjectPropertyMap {
       boolean isCandidate(final EStructuralFeature feature) {
          if (feature instanceof EAttribute) {
             return isCandidate((EAttribute) feature);
-         } else {
-            return isCandidate((EReference) feature);
          }
+         return isCandidate((EReference) feature);
       }
 
       boolean isCandidate(final EAttribute attribute) {

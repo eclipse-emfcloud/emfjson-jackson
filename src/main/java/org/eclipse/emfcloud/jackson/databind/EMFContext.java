@@ -46,7 +46,11 @@ import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.cfg.ContextAttributes;
 
-public class EMFContext {
+public final class EMFContext {
+
+   private EMFContext() {
+
+   }
 
    public enum Attributes {
       // public attributes
@@ -122,13 +126,15 @@ public class EMFContext {
       @SuppressWarnings("unchecked")
       Map<EObject, URI> objects = (Map<EObject, URI>) ctxt.getAttribute(Internals.MAP_OF_OBJECTS);
       if (objects == null) {
-         ctxt.setAttribute(Internals.MAP_OF_OBJECTS, objects = new HashMap<>());
+         objects = new HashMap<>();
+         ctxt.setAttribute(Internals.MAP_OF_OBJECTS, objects);
       }
 
       URI uri = objects.get(object);
 
       if (uri == null) {
-         objects.put(object, uri = EcoreUtil.getURI(object));
+         uri = EcoreUtil.getURI(object);
+         objects.put(object, uri);
       }
 
       return uri;
@@ -142,7 +148,8 @@ public class EMFContext {
       @SuppressWarnings("unchecked")
       Map<String, EObject> uris = (Map<String, EObject>) ctxt.getAttribute(Internals.MAP_OF_URIS);
       if (uris == null) {
-         ctxt.setAttribute(Internals.MAP_OF_URIS, uris = new HashMap<>());
+         uris = new HashMap<>();
+         ctxt.setAttribute(Internals.MAP_OF_URIS, uris);
       }
 
       EObject object = uris.get(uri);
@@ -245,7 +252,8 @@ public class EMFContext {
       Map<EObject, Resource> resources = (Map<EObject, Resource>) ctxt.getAttribute(Internals.MAP_OF_RESOURCES);
 
       if (resources == null) {
-         ctxt.setAttribute(Internals.MAP_OF_RESOURCES, resources = new HashMap<>());
+         resources = new HashMap<>();
+         ctxt.setAttribute(Internals.MAP_OF_RESOURCES, resources);
       }
 
       Resource resource = resources.get(object);
@@ -272,7 +280,8 @@ public class EMFContext {
       }
 
       if (resourceSet == null) {
-         context.setAttribute(Attributes.RESOURCE_SET, resourceSet = new ResourceSetImpl());
+         resourceSet = new ResourceSetImpl();
+         context.setAttribute(Attributes.RESOURCE_SET, resourceSet);
       }
 
       return resourceSet;
@@ -360,11 +369,13 @@ public class EMFContext {
    public static EcoreTypeFactory getTypeFactory(final DatabindContext ctxt) {
       EcoreTypeFactory factory = (EcoreTypeFactory) ctxt.getAttribute(Internals.TYPE_FACTORY);
       if (factory == null) {
-         ctxt.setAttribute(Internals.TYPE_FACTORY, factory = new EcoreTypeFactory());
+         factory = new EcoreTypeFactory();
+         ctxt.setAttribute(Internals.TYPE_FACTORY, factory);
       }
       return factory;
    }
 
+   @SuppressWarnings("checkstyle:cyclomaticComplexity")
    public static List<EClass> allSubTypes(final DatabindContext ctxt, final EClass eClass) {
       if (eClass == null) {
          return Collections.emptyList();

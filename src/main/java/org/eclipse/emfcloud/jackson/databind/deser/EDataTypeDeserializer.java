@@ -32,16 +32,14 @@ public class EDataTypeDeserializer extends JsonDeserializer<Object> {
 
       if (dataType == null) {
          return null;
-      } else {
-         Class<?> type = dataType.getInstanceClass();
-
-         if (type == null || dataType instanceof EEnum || EJAVA_CLASS.equals(dataType)
-            || EJAVA_OBJECT.equals(dataType)) {
-            return EcoreUtil.createFromString(dataType, jp.getText());
-         } else {
-            return ctxt.readValue(jp, type);
-         }
       }
+      Class<?> type = dataType.getInstanceClass();
+
+      if (type == null || dataType instanceof EEnum || EJAVA_CLASS.equals(dataType)
+         || EJAVA_OBJECT.equals(dataType)) {
+         return EcoreUtil.createFromString(dataType, jp.getText());
+      }
+      return ctxt.readValue(jp, type);
    }
 
 }

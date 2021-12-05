@@ -20,8 +20,8 @@ import org.eclipse.emfcloud.jackson.utils.ValueWriter;
 public class EcoreIdentityInfo {
 
    public static final String PROPERTY = "@id";
-   private static final ValueReader<Object, String> defaultValueReader = (value, context) -> value.toString();
-   private static final ValueWriter<EObject, Object> defaultValueWriter = (object, context) -> {
+   private static final ValueReader<Object, String> DEFAULT_VALUE_READER = (value, context) -> value.toString();
+   private static final ValueWriter<EObject, Object> DEFAULT_VALUE_WRITER = (object, context) -> {
       Resource resource = EMFContext.getResource(context, object);
       Object id;
       if (resource instanceof JsonResource) {
@@ -55,8 +55,8 @@ public class EcoreIdentityInfo {
    public EcoreIdentityInfo(final String property, final ValueReader<Object, String> valueReader,
       final ValueWriter<EObject, Object> valueWriter) {
       this.property = property == null ? PROPERTY : property;
-      this.valueReader = valueReader == null ? defaultValueReader : valueReader;
-      this.valueWriter = valueWriter == null ? defaultValueWriter : valueWriter;
+      this.valueReader = valueReader == null ? DEFAULT_VALUE_READER : valueReader;
+      this.valueWriter = valueWriter == null ? DEFAULT_VALUE_WRITER : valueWriter;
    }
 
    public String getProperty() { return property; }

@@ -44,6 +44,7 @@ public class ResourceDeserializer extends JsonDeserializer<Resource> {
    }
 
    @Override
+   @SuppressWarnings("checkstyle:cyclomaticComplexity")
    public Resource deserialize(final JsonParser jp, final DeserializationContext ctxt, final Resource intoValue)
       throws IOException {
       final Resource resource = getResource(ctxt, intoValue);
@@ -110,7 +111,8 @@ public class ResourceDeserializer extends JsonDeserializer<Resource> {
    protected ResourceSet getResourceSet(final DeserializationContext context) {
       ResourceSet resourceSet = EMFContext.getResourceSet(context);
       if (resourceSet == null) {
-         context.setAttribute(RESOURCE_SET, resourceSet = new ResourceSetImpl());
+         resourceSet = new ResourceSetImpl();
+         context.setAttribute(RESOURCE_SET, resourceSet);
       }
 
       return resourceSet;

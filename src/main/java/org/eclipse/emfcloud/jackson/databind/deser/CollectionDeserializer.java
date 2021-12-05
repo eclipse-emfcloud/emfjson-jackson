@@ -51,7 +51,7 @@ public class CollectionDeserializer extends JsonDeserializer<Collection<Object>>
       return values;
    }
 
-   @SuppressWarnings("unchecked")
+   @SuppressWarnings({ "unchecked", "checkstyle:illegalCatch" })
    private Collection<Object> createCollection(final DeserializationContext ctxt) {
       CollectionType type = baseType;
       try {

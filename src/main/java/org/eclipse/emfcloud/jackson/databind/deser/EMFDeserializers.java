@@ -35,10 +35,10 @@ import com.fasterxml.jackson.databind.type.ReferenceType;
 
 public class EMFDeserializers extends Deserializers.Base {
 
-   private final ResourceDeserializer _resourceDeserializer;
-   private final JsonDeserializer<EList<Map.Entry<?, ?>>> _mapDeserializer;
-   private final JsonDeserializer<Object> _dataTypeDeserializer;
-   private final JsonDeserializer<ReferenceEntry> _referenceDeserializer;
+   private final ResourceDeserializer resourceDeserializer;
+   private final JsonDeserializer<EList<Map.Entry<?, ?>>> mapDeserializer;
+   private final JsonDeserializer<Object> dataTypeDeserializer;
+   private final JsonDeserializer<ReferenceEntry> referenceDeserializer;
    private final EObjectPropertyMap.Builder builder;
 
    public EMFDeserializers(final EMFModule module) {
@@ -47,10 +47,10 @@ public class EMFDeserializers extends Deserializers.Base {
          module.getTypeInfo(),
          module.getReferenceInfo(),
          module.getFeatures());
-      this._resourceDeserializer = new ResourceDeserializer(module.getUriHandler());
-      this._referenceDeserializer = module.getReferenceDeserializer();
-      this._mapDeserializer = new EMapDeserializer();
-      this._dataTypeDeserializer = new EDataTypeDeserializer();
+      this.resourceDeserializer = new ResourceDeserializer(module.getUriHandler());
+      this.referenceDeserializer = module.getReferenceDeserializer();
+      this.mapDeserializer = new EMapDeserializer();
+      this.dataTypeDeserializer = new EDataTypeDeserializer();
    }
 
    @Override
@@ -61,7 +61,7 @@ public class EMFDeserializers extends Deserializers.Base {
       final TypeDeserializer elementTypeDeserializer,
       final JsonDeserializer<?> elementDeserializer) throws JsonMappingException {
       if (type.isTypeOrSubTypeOf(EMap.class)) {
-         return _mapDeserializer;
+         return mapDeserializer;
       }
 
       return super.findMapLikeDeserializer(type, config, beanDesc, keyDeserializer, elementTypeDeserializer,
@@ -72,7 +72,7 @@ public class EMFDeserializers extends Deserializers.Base {
    public JsonDeserializer<?> findEnumDeserializer(final Class<?> type, final DeserializationConfig config,
       final BeanDescription beanDesc) throws JsonMappingException {
       if (Enumerator.class.isAssignableFrom(type)) {
-         return _dataTypeDeserializer;
+         return dataTypeDeserializer;
       }
 
       return super.findEnumDeserializer(type, config, beanDesc);
@@ -86,7 +86,7 @@ public class EMFDeserializers extends Deserializers.Base {
       final JsonDeserializer<?> elementDeserializer) throws JsonMappingException {
       if (type.getContentType().isTypeOrSubTypeOf(EObject.class)) {
          return new CollectionDeserializer(type, new EObjectDeserializer(builder, type.getContentType().getRawClass()),
-            _referenceDeserializer);
+            referenceDeserializer);
       }
       return super.findCollectionDeserializer(type, config, beanDesc, elementTypeDeserializer, elementDeserializer);
    }
@@ -97,8 +97,8 @@ public class EMFDeserializers extends Deserializers.Base {
       final BeanDescription beanDesc,
       final TypeDeserializer contentTypeDeserializer,
       final JsonDeserializer<?> contentDeserializer) throws JsonMappingException {
-      if (_referenceDeserializer != null) {
-         return _referenceDeserializer;
+      if (referenceDeserializer != null) {
+         return referenceDeserializer;
       }
       return super.findReferenceDeserializer(refType, config, beanDesc, contentTypeDeserializer, contentDeserializer);
    }
@@ -108,15 +108,15 @@ public class EMFDeserializers extends Deserializers.Base {
       final DeserializationConfig config,
       final BeanDescription beanDesc) throws JsonMappingException {
       if (type.isTypeOrSubTypeOf(Resource.class)) {
-         return _resourceDeserializer;
+         return resourceDeserializer;
       }
 
       if (type.isReferenceType()) {
-         return _referenceDeserializer;
+         return referenceDeserializer;
       }
 
       if (type.isTypeOrSubTypeOf(EcoreType.DataType.class)) {
-         return _dataTypeDeserializer;
+         return dataTypeDeserializer;
       }
 
       if (type.isTypeOrSubTypeOf(EObject.class)) {

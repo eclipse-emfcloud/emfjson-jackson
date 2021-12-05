@@ -52,6 +52,7 @@ public class EObjectFeatureProperty extends EObjectProperty {
    }
 
    @Override
+   @SuppressWarnings({ "checkstyle:cyclomaticComplexity", "checkstyle:fallThrough" })
    public void deserializeAndSet(final JsonParser jp, final EObject current, final DeserializationContext ctxt,
       final Resource resource)
       throws IOException {
@@ -72,6 +73,7 @@ public class EObjectFeatureProperty extends EObjectProperty {
             EMFContext.setFeature(ctxt, feature);
             EMFContext.setParent(ctxt, current);
          }
+         //$FALL-THROUGH$
          case SINGLE_ATTRIBUTE:
          case MANY_ATTRIBUTE: {
             if (feature.getEType() instanceof EDataType) {
@@ -104,6 +106,8 @@ public class EObjectFeatureProperty extends EObjectProperty {
                }
             }
          }
+            break;
+         default:
             break;
       }
    }
