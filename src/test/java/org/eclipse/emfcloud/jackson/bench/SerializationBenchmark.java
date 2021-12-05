@@ -1,17 +1,16 @@
 /*
  * Copyright (c) 2019 Guillaume Hillairet and others.
- *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
  * https://www.eclipse.org/legal/epl-2.0, or the MIT License which is
  * available at https://opensource.org/licenses/MIT.
- *
  * SPDX-License-Identifier: EPL-2.0 OR MIT
- *
  */
 package org.eclipse.emfcloud.jackson.bench;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.Map;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -24,111 +23,109 @@ import org.eclipse.emfcloud.jackson.junit.model.ModelPackage;
 import org.eclipse.emfcloud.jackson.module.EMFModule;
 import org.eclipse.emfcloud.jackson.resource.JsonResourceFactory;
 
-import java.io.IOException;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SerializationBenchmark {
 
-	int times = 20;
+   int times = 20;
 
-	public static void main(String[] args) {
-		SerializationBenchmark b = new SerializationBenchmark();
-		// first
-		System.out.println("--- 1st benchmarck ---");
-		b.benchmarkSerializeXmi(Benchmarks.first());
-		b.benchmarkSerializeBinary(Benchmarks.first());
-		b.benchmarkSerializeJson(Benchmarks.first());
-		// second
-		System.out.println("--- 2nd benchmarck ---");
-		b.benchmarkSerializeXmi(Benchmarks.second());
-		b.benchmarkSerializeBinary(Benchmarks.second());
-		b.benchmarkSerializeJson(Benchmarks.second());
-		// third
-		System.out.println("--- 3rd benchmarck ---");
-		b.benchmarkSerializeXmi(Benchmarks.third());
-		b.benchmarkSerializeBinary(Benchmarks.third());
-		b.benchmarkSerializeJson(Benchmarks.third());
-	}
+   public static void main(final String[] args) {
+      SerializationBenchmark b = new SerializationBenchmark();
+      // first
+      System.out.println("--- 1st benchmarck ---");
+      b.benchmarkSerializeXmi(Benchmarks.first());
+      b.benchmarkSerializeBinary(Benchmarks.first());
+      b.benchmarkSerializeJson(Benchmarks.first());
+      // second
+      System.out.println("--- 2nd benchmarck ---");
+      b.benchmarkSerializeXmi(Benchmarks.second());
+      b.benchmarkSerializeBinary(Benchmarks.second());
+      b.benchmarkSerializeJson(Benchmarks.second());
+      // third
+      System.out.println("--- 3rd benchmarck ---");
+      b.benchmarkSerializeXmi(Benchmarks.third());
+      b.benchmarkSerializeBinary(Benchmarks.third());
+      b.benchmarkSerializeJson(Benchmarks.third());
+   }
 
-	private long performSave(Resource resource, Map<String, Object> options) {
-		long start = System.currentTimeMillis();
-		try {
-			resource.save(options);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return System.currentTimeMillis() - start;
-	}
+   private long performSave(final Resource resource, final Map<String, Object> options) {
+      long start = System.currentTimeMillis();
+      try {
+         resource.save(options);
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+      return System.currentTimeMillis() - start;
+   }
 
-	public void benchmarkSerializeXmi(EObject container) {
-		long sum = 0;
+   public void benchmarkSerializeXmi(final EObject container) {
+      long sum = 0;
 
-		for (int i = 0; i < times; i++) {
-			ResourceSet resourceSet = new ResourceSetImpl();
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-			resourceSet.getPackageRegistry().put(ModelPackage.eNS_URI, ModelPackage.eINSTANCE);
-			Resource resource = resourceSet.createResource(URI.createURI("bench1-model.xmi"));
-			resource.getContents().add(container);
+      for (int i = 0; i < times; i++) {
+         ResourceSet resourceSet = new ResourceSetImpl();
+         resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+         resourceSet.getPackageRegistry().put(ModelPackage.eNS_URI, ModelPackage.eINSTANCE);
+         Resource resource = resourceSet.createResource(URI.createURI("bench1-model.xmi"));
+         resource.getContents().add(container);
 
-			sum += performSave(resource, null);
-		}
+         sum += performSave(resource, null);
+      }
 
-		long average = sum / times;
-		System.out.println("XMI: " + average / 1000.);
-	}
+      long average = sum / times;
+      System.out.println("XMI: " + average / 1000.);
+   }
 
-	public void benchmarkSerializeBinary(EObject container) {
-		long sum = 0;
+   public void benchmarkSerializeBinary(final EObject container) {
+      long sum = 0;
 
-		for (int i = 0; i < times; i++) {
-			ResourceSet resourceSet = new ResourceSetImpl();
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new ResourceFactoryImpl() {
-				@Override
-				public Resource createResource(URI uri) {
-					return new BinaryResourceImpl(uri);
-				}
-			});
-			resourceSet.getPackageRegistry().put(ModelPackage.eNS_URI, ModelPackage.eINSTANCE);
-			Resource resource = resourceSet.createResource(URI.createURI("bench1-model.n"));
-			resource.getContents().add(container);
+      for (int i = 0; i < times; i++) {
+         ResourceSet resourceSet = new ResourceSetImpl();
+         resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new ResourceFactoryImpl() {
+            @Override
+            public Resource createResource(final URI uri) {
+               return new BinaryResourceImpl(uri);
+            }
+         });
+         resourceSet.getPackageRegistry().put(ModelPackage.eNS_URI, ModelPackage.eINSTANCE);
+         Resource resource = resourceSet.createResource(URI.createURI("bench1-model.n"));
+         resource.getContents().add(container);
 
-			sum += performSave(resource, null);
-		}
+         sum += performSave(resource, null);
+      }
 
-		long average = sum / times;
-		System.out.println("Binary: " + average / 1000.);
-	}
+      long average = sum / times;
+      System.out.println("Binary: " + average / 1000.);
+   }
 
-	ObjectMapper mapper = new ObjectMapper();
+   ObjectMapper mapper = new ObjectMapper();
 
-	{
-		EMFModule module = new EMFModule();
-		module.configure(EMFModule.Feature.OPTION_SERIALIZE_TYPE, false);
-		mapper.registerModule(module);
-	}
+   {
+      EMFModule module = new EMFModule();
+      module.configure(EMFModule.Feature.OPTION_SERIALIZE_TYPE, false);
+      mapper.registerModule(module);
+   }
 
-	public void benchmarkSerializeJson(EObject container) {
-		long sum = 0;
+   public void benchmarkSerializeJson(final EObject container) {
+      long sum = 0;
 
-		for (int i = 0; i < times; i++) {
-			ResourceSet resourceSet = new ResourceSetImpl();
+      for (int i = 0; i < times; i++) {
+         ResourceSet resourceSet = new ResourceSetImpl();
 
-			resourceSet.getResourceFactoryRegistry()
-					.getExtensionToFactoryMap()
-					.put("*", new JsonResourceFactory(mapper));
+         resourceSet.getResourceFactoryRegistry()
+            .getExtensionToFactoryMap()
+            .put("*", new JsonResourceFactory(mapper));
 
-			resourceSet.getPackageRegistry()
-					.put(ModelPackage.eNS_URI, ModelPackage.eINSTANCE);
+         resourceSet.getPackageRegistry()
+            .put(ModelPackage.eNS_URI, ModelPackage.eINSTANCE);
 
-			Resource resource = resourceSet.createResource(URI.createURI("bench1-model.json"));
-			resource.getContents().add(container);
+         Resource resource = resourceSet.createResource(URI.createURI("bench1-model.json"));
+         resource.getContents().add(container);
 
-			sum += performSave(resource, null);
-		}
+         sum += performSave(resource, null);
+      }
 
-		long average = sum / times;
-		System.out.println("JSON: " + average / 1000.);
-	}
+      long average = sum / times;
+      System.out.println("JSON: " + average / 1000.);
+   }
 
 }
-
