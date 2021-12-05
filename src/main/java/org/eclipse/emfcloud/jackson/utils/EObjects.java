@@ -78,7 +78,7 @@ public final class EObjects {
     * @param value of entry
     * @return entry
     */
-   @SuppressWarnings("unchecked")
+
    public static EObject createEntry(final String key, final Object value, final EClass type) {
       if (type == EcorePackage.Literals.ESTRING_TO_STRING_MAP_ENTRY) {
 
@@ -89,7 +89,7 @@ public final class EObjects {
          return entry;
 
       }
-      final BasicEMapEntry entry = new BasicEMapEntry<>();
+      final BasicEMapEntry<String, Object> entry = new BasicEMapEntry<>();
       entry.eSetClass(type);
       entry.setKey(key);
       entry.setValue(value);

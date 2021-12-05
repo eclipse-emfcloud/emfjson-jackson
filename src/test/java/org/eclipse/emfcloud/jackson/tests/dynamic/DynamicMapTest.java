@@ -36,6 +36,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@SuppressWarnings("rawtypes")
 public class DynamicMapTest {
 
    private final ObjectMapper mapper = new ObjectMapper();
@@ -122,6 +123,7 @@ public class DynamicMapTest {
    }
 
    @Test
+   @SuppressWarnings("unchecked")
    public void testLoadMap() {
       Resource resource = resourceSet.getResource(
          URI.createURI("src/test/resources/tests/test-map-1.json"), true);

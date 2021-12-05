@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.JsonLocation;
 
 public class JSONException extends Exception implements Resource.Diagnostic {
 
+   private static final long serialVersionUID = -7658549711611092935L;
    private final String location;
    private final int line;
    private final int column;

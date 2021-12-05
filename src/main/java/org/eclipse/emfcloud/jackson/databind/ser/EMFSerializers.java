@@ -59,6 +59,7 @@ public class EMFSerializers extends Serializers.Base {
          elementValueSerializer);
    }
 
+   @SuppressWarnings({ "rawtypes", "unchecked" })
    @Override
    public JsonSerializer<?> findCollectionSerializer(final SerializationConfig config, final CollectionType type,
       final BeanDescription beanDesc, final TypeSerializer elementTypeSerializer,

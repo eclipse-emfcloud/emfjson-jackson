@@ -37,7 +37,7 @@ public class EMapDeserializer extends JsonDeserializer<EList<Map.Entry<?, ?>>> {
 
    @Override
 
-   @SuppressWarnings({ "unchecked", "checkstyle:cyclomaticComplexity" })
+   @SuppressWarnings({ "unchecked", "checkstyle:cyclomaticComplexity", "rawtypes" })
    public EList<Map.Entry<?, ?>> deserialize(final JsonParser jp, final DeserializationContext ctxt,
       final EList<Map.Entry<?, ?>> intoValue) throws IOException {
       EReference reference = EMFContext.getReference(ctxt);

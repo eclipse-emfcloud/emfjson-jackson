@@ -28,15 +28,12 @@ import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @Ignore
 public class ProxyAttributeTest {
 
    @ClassRule
    public static StandardFixture fixture = new StandardFixture();
 
-   private final ObjectMapper mapper = fixture.mapper();
    private final ResourceSet resourceSet = fixture.getResourceSet();
 
    @Test
