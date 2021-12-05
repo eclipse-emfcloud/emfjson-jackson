@@ -66,7 +66,17 @@
 		<ecore-xtext-version>1.4.0</ecore-xtext-version>
 		<ecore-xcore-version>1.11.0</ecore-xcore-version>
 		<ecore-xcore-lib-version>1.4.0</ecore-xcore-lib-version>
+		<checkstyle.plugin>3.1.2</checkstyle.plugin>
+		<checkstyle>8.44</checkstyle>
 	</properties>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>sonatype</id>
+			<name>Sonatype</name>
+			<url>https://oss.sonatype.org/content/groups/public</url>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<dependencies>
 
@@ -358,6 +368,37 @@
 								<groupId>org.eclipse.emf</groupId>
 								<artifactId>org.eclipse.emf.ecore.xcore.lib</artifactId>
 								<version>${ecore-xcore-lib-version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+					<!-- to disable use -Dcheckstyle.skip -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-checkstyle-plugin</artifactId>
+						<version>${checkstyle.plugin}</version>
+						<configuration>
+							<configLocation>emfcloud-checkstyle-8.44.xml</configLocation>
+							<consoleOutput>true</consoleOutput>
+							<excludes>**/src-gen/**/*.java</excludes>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>validate</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>org.eclipse.emfcloud</groupId>
+								<artifactId>org.eclipse.emfcloud.checkstyle</artifactId>
+								<version>0.1.0-SNAPSHOT</version>
+							</dependency>
+							<dependency>
+								<groupId>com.puppycrawl.tools</groupId>
+								<artifactId>checkstyle</artifactId>
+								<version>${checkstyle}</version>
 							</dependency>
 						</dependencies>
 					</plugin>
