@@ -1,19 +1,21 @@
 /*
  * Copyright (c) 2019 Guillaume Hillairet and others.
- *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
  * https://www.eclipse.org/legal/epl-2.0, or the MIT License which is
  * available at https://opensource.org/licenses/MIT.
- *
  * SPDX-License-Identifier: EPL-2.0 OR MIT
- *
  */
 
 package org.eclipse.emfcloud.jackson.tests.dynamic;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.eclipse.emfcloud.jackson.module.EMFModule.Feature.OPTION_SERIALIZE_DEFAULT_VALUE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnumLiteral;
@@ -26,58 +28,54 @@ import org.eclipse.emfcloud.jackson.support.StandardFixture;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
-import static org.eclipse.emfcloud.jackson.module.EMFModule.Feature.OPTION_SERIALIZE_DEFAULT_VALUE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DynamicEnumTest {
 
-	@ClassRule
-	public static StandardFixture fixture = new DynamicFixture();
+   @ClassRule
+   public static StandardFixture fixture = new DynamicFixture();
 
-	private ObjectMapper mapper = fixture.mapper();
-	private ResourceSet resourceSet = fixture.getResourceSet();
+   private final ObjectMapper mapper = fixture.mapper();
+   private final ResourceSet resourceSet = fixture.getResourceSet();
 
-	@Test
-	public void testSaveDynamicEnum() {
-		JsonNode expected = mapper.createObjectNode()
-				.put("eClass", "http://emfjson/dynamic/model#//A")
-				.put("intValue", 0)
-				.put("someKind", "e1");
+   @Test
+   public void testSaveDynamicEnum() {
+      JsonNode expected = mapper.createObjectNode()
+         .put("eClass", "http://emfjson/dynamic/model#//A")
+         .put("intValue", 0)
+         .put("someKind", "e1");
 
-		EClass a = (EClass) resourceSet.getEObject(URI.createURI("http://emfjson/dynamic/model#//A"), true);
-		EObject a1 = EcoreUtil.create(a);
+      EClass a = (EClass) resourceSet.getEObject(URI.createURI("http://emfjson/dynamic/model#//A"), true);
+      EObject a1 = EcoreUtil.create(a);
 
-		JsonNode result = fixture.mapper(OPTION_SERIALIZE_DEFAULT_VALUE, true)
-				.valueToTree(a1);
+      JsonNode result = fixture.mapper(OPTION_SERIALIZE_DEFAULT_VALUE, true)
+         .valueToTree(a1);
 
-		assertEquals(expected, result);
-	}
+      assertEquals(expected, result);
+   }
 
-	@Test
-	public void testLoadDynamicEnum() throws IOException {
-		JsonNode data = mapper.createObjectNode()
-				.put("eClass", "http://emfjson/dynamic/model#//A")
-				.put("someKind", "E2");
+   @Test
+   public void testLoadDynamicEnum() throws IOException {
+      JsonNode data = mapper.createObjectNode()
+         .put("eClass", "http://emfjson/dynamic/model#//A")
+         .put("someKind", "E2");
 
-		Resource resource = resourceSet.createResource(URI.createURI("tests/test.json"));
-		resource.load(new ByteArrayInputStream(mapper.writeValueAsBytes(data)), null);
+      Resource resource = resourceSet.createResource(URI.createURI("tests/test.json"));
+      resource.load(new ByteArrayInputStream(mapper.writeValueAsBytes(data)), null);
 
-		assertEquals(1, resource.getContents().size());
+      assertEquals(1, resource.getContents().size());
 
-		EObject root = resource.getContents().get(0);
+      EObject root = resource.getContents().get(0);
 
-		assertEquals("A", root.eClass().getName());
+      assertEquals("A", root.eClass().getName());
 
-		Object literal = root.eGet(root.eClass().getEStructuralFeature("someKind"));
+      Object literal = root.eGet(root.eClass().getEStructuralFeature("someKind"));
 
-		assertTrue(literal instanceof EEnumLiteral);
+      assertTrue(literal instanceof EEnumLiteral);
 
-		assertEquals("e2", ((EEnumLiteral) literal).getName());
-		assertEquals("E2", ((EEnumLiteral) literal).getLiteral());
-	}
+      assertEquals("e2", ((EEnumLiteral) literal).getName());
+      assertEquals("E2", ((EEnumLiteral) literal).getLiteral());
+   }
 
 }
