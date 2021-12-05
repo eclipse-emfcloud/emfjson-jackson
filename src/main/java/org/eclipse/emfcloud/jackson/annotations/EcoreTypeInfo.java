@@ -28,18 +28,18 @@ public class EcoreTypeInfo {
 
    public static final String PROPERTY = "eClass";
 
-   public static final ValueReader<String, EClass> defaultValueReader = (value, context) -> findEClass(context, value);
-   public static final ValueWriter<EClass, String> defaultValueWriter = (value, context) -> getURI(context, value)
+   public static final ValueReader<String, EClass> DEFAULT_VALUE_READER = (value, context) -> findEClass(context, value);
+   public static final ValueWriter<EClass, String> DEFAULT_VALUE_WRITER = (value, context) -> getURI(context, value)
       .toString();
 
-   public static final ValueReader<String, EClass> readByName = (value, context) -> EMFContext.findEClassByName(context,
+   public static final ValueReader<String, EClass> READ_BY_NAME = (value, context) -> EMFContext.findEClassByName(context,
       value);
-   public static final ValueWriter<EClass, String> writeByName = (value, context) -> value != null ? value.getName()
+   public static final ValueWriter<EClass, String> WRITE_BY_NAME = (value, context) -> value != null ? value.getName()
       : null;
 
-   public static final ValueReader<String, EClass> readByClassName = (value, context) -> EMFContext
+   public static final ValueReader<String, EClass> READ_BY_CLASS = (value, context) -> EMFContext
       .findEClassByQualifiedName(context, value);
-   public static final ValueWriter<EClass, String> writeByClassName = (value,
+   public static final ValueWriter<EClass, String> WRITE_BY_CLASS_NAME = (value,
       context) -> value != null ? value.getInstanceClassName() : null;
 
    private final String property;
@@ -65,8 +65,8 @@ public class EcoreTypeInfo {
    public EcoreTypeInfo(final String property, final ValueReader<String, EClass> valueReader,
       final ValueWriter<EClass, String> valueWriter) {
       this.property = property == null ? PROPERTY : property;
-      this.valueReader = valueReader == null ? defaultValueReader : valueReader;
-      this.valueWriter = valueWriter == null ? defaultValueWriter : valueWriter;
+      this.valueReader = valueReader == null ? DEFAULT_VALUE_READER : valueReader;
+      this.valueWriter = valueWriter == null ? DEFAULT_VALUE_WRITER : valueWriter;
    }
 
    public String getProperty() { return property; }
@@ -78,11 +78,11 @@ public class EcoreTypeInfo {
    public static EcoreTypeInfo create(final String property, final USE use) {
       switch (use) {
          case NAME:
-            return new EcoreTypeInfo(property, readByName, writeByName);
+            return new EcoreTypeInfo(property, READ_BY_NAME, WRITE_BY_NAME);
          case CLASS:
-            return new EcoreTypeInfo(property, readByClassName, writeByClassName);
+            return new EcoreTypeInfo(property, READ_BY_CLASS, WRITE_BY_CLASS_NAME);
          default:
-            return new EcoreTypeInfo(property, defaultValueReader, defaultValueWriter);
+            return new EcoreTypeInfo(property, DEFAULT_VALUE_READER, DEFAULT_VALUE_WRITER);
       }
    }
 }

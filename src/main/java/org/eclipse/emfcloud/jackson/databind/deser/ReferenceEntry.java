@@ -47,6 +47,7 @@ public interface ReferenceEntry {
       }
 
       @Override
+      @SuppressWarnings("checkstyle:cyclomaticComplexity")
       public void resolve(final DatabindContext context, final URIHandler handler) {
          if (id == null) {
             return;
@@ -82,6 +83,7 @@ public interface ReferenceEntry {
          }
       }
 
+      @SuppressWarnings("checkstyle:illegalCatch")
       private EObject createProxy(final ResourceSet resourceSet, final URI uri) {
          EClass eClass;
          try {
@@ -103,6 +105,7 @@ public interface ReferenceEntry {
       }
 
       @Override
+      @SuppressWarnings("checkstyle:cyclomaticComplexity")
       public boolean equals(final Object o) {
          if (this == o) {
             return true;
@@ -113,7 +116,13 @@ public interface ReferenceEntry {
 
          Base that = (Base) o;
 
-         if (!owner.equals(that.owner) || !reference.equals(that.reference) || !id.equals(that.id)) {
+         if (!owner.equals(that.owner)) {
+            return false;
+         }
+         if (!reference.equals(that.reference)) {
+            return false;
+         }
+         if (!id.equals(that.id)) {
             return false;
          }
          return type != null ? type.equals(that.type) : that.type == null;

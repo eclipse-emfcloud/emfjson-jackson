@@ -77,14 +77,12 @@ public class EcoreReferenceSerializer extends JsonSerializer<EObject> {
 
          return deresolved == null ? null : deresolved.toString();
 
-      } else {
-
-         Resource resource = EMFContext.getResource(ctxt, value);
-         if (resource != null) {
-            return resource.getURIFragment(value);
-         }
-
-         return null;
       }
+      Resource resource = EMFContext.getResource(ctxt, value);
+      if (resource != null) {
+         return resource.getURIFragment(value);
+      }
+
+      return null;
    }
 }

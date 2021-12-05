@@ -27,6 +27,7 @@ public enum FeatureKind {
    MAP,
    UNKNOWN;
 
+   @SuppressWarnings("checkstyle:cyclomaticComplexity")
    public static FeatureKind get(final ETypedElement feature) {
       if (feature == null) {
          return UNKNOWN;

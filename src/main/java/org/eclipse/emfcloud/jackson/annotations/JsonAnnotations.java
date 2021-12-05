@@ -26,9 +26,13 @@ import org.eclipse.emfcloud.jackson.databind.EMFContext;
 import org.eclipse.emfcloud.jackson.utils.ValueReader;
 import org.eclipse.emfcloud.jackson.utils.ValueWriter;
 
-public class JsonAnnotations {
+public final class JsonAnnotations {
 
    private static final String EXTENDED_METADATA = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+
+   private JsonAnnotations() {
+
+   }
 
    /**
     * Returns the name that should be use to serialize the property.
@@ -71,12 +75,13 @@ public class JsonAnnotations {
     * @param classifier
     * @return the type information property
     */
+   @SuppressWarnings("checkstyle:cyclomaticComplexity")
    public static EcoreTypeInfo getTypeProperty(final EClassifier classifier) {
       String property = getValue(classifier, "JsonType", "property");
       String use = getValue(classifier, "JsonType", "use");
 
-      ValueReader<String, EClass> valueReader = EcoreTypeInfo.defaultValueReader;
-      ValueWriter<EClass, String> valueWriter = EcoreTypeInfo.defaultValueWriter;
+      ValueReader<String, EClass> valueReader = EcoreTypeInfo.DEFAULT_VALUE_READER;
+      ValueWriter<EClass, String> valueWriter = EcoreTypeInfo.DEFAULT_VALUE_WRITER;
 
       if (use != null) {
          EcoreTypeInfo.USE useType = EcoreTypeInfo.USE.valueOf(use.toUpperCase());
@@ -102,8 +107,8 @@ public class JsonAnnotations {
             };
             valueWriter = (value, context) -> value.getInstanceClassName();
          } else {
-            valueReader = EcoreTypeInfo.defaultValueReader;
-            valueWriter = EcoreTypeInfo.defaultValueWriter;
+            valueReader = EcoreTypeInfo.DEFAULT_VALUE_READER;
+            valueWriter = EcoreTypeInfo.DEFAULT_VALUE_WRITER;
          }
       }
 
@@ -160,8 +165,7 @@ public class JsonAnnotations {
             }
          }
          return values;
-      } else {
-         return Collections.singletonList(value);
       }
+      return Collections.singletonList(value);
    }
 }

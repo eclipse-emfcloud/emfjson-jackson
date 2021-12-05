@@ -36,12 +36,12 @@ public class EcoreTypeFactory {
    private final Map<Pair<EClass, EStructuralFeature>, JavaType> cache = new WeakHashMap<>();
 
    private static class Pair<A, B> {
-      final A _1;
-      final B _2;
+      private final A a;
+      private final B b;
 
-      Pair(final A _1, final B _2) {
-         this._1 = _1;
-         this._2 = _2;
+      Pair(final A a, final B b) {
+         this.a = a;
+         this.b = b;
       }
 
       @Override
@@ -53,17 +53,17 @@ public class EcoreTypeFactory {
             return false;
          }
          Pair<?, ?> pair = (Pair<?, ?>) o;
-         return Objects.equals(_1, pair._1) &&
-            Objects.equals(_2, pair._2);
+         return Objects.equals(a, pair.a) &&
+            Objects.equals(b, pair.b);
       }
 
       @Override
       public int hashCode() {
-         return Objects.hash(_1, _2);
+         return Objects.hash(a, b);
       }
 
-      public static <A, B> Pair<A, B> of(final A _1, final B _2) {
-         return new Pair<>(_1, _2);
+      public static <A, B> Pair<A, B> of(final A a, final B b) {
+         return new Pair<>(a, b);
       }
    }
 
@@ -135,9 +135,8 @@ public class EcoreTypeFactory {
       Class<?> keyClass = rawType(keyType);
       if (String.class.isAssignableFrom(keyClass)) {
          return factory.constructMapLikeType(EMap.class, keyClass, rawType(valueType));
-      } else {
-         return factory.constructCollectionType(Collection.class, factory.constructType(EObject.class));
       }
+      return factory.constructCollectionType(Collection.class, factory.constructType(EObject.class));
    }
 
    private Class<?> rawType(final EClassifier classifier) {

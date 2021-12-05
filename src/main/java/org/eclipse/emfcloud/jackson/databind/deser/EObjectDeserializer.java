@@ -46,6 +46,7 @@ public class EObjectDeserializer extends JsonDeserializer<EObject> {
    }
 
    @Override
+   @SuppressWarnings({ "checkstyle:cyclomaticComplexity", "checkstyle:npathComplexity" })
    public EObject deserialize(final JsonParser jp, final DeserializationContext ctxt) throws IOException {
       EMFContext.prepare(ctxt);
 
@@ -122,6 +123,7 @@ public class EObjectDeserializer extends JsonDeserializer<EObject> {
       return intoValue;
    }
 
+   @SuppressWarnings("checkstyle:cyclomaticComplexity")
    private EObject postDeserialize(final TokenBuffer buffer, EObject object, final EClass defaultType,
       final DeserializationContext ctxt)
       throws IOException {

@@ -74,9 +74,8 @@ public class JsonResource extends ResourceImpl {
    public String getID(final EObject eObject) {
       if (eObjectToIDMap == null) {
          return null;
-      } else {
-         return eObjectToIDMap.get(eObject);
       }
+      return eObjectToIDMap.get(eObject);
    }
 
    @Override
@@ -97,9 +96,8 @@ public class JsonResource extends ResourceImpl {
 
       if (id != null) {
          return id;
-      } else {
-         return super.getURIFragment(eObject);
       }
+      return super.getURIFragment(eObject);
    }
 
    public void setID(final EObject eObject, final String id) {

@@ -96,8 +96,8 @@ public class EMFModule extends SimpleModule {
        */
       OPTION_SERIALIZE_CONTAINMENT_AS_HREF(false);
 
-      final boolean _defaultState;
-      final int _mask;
+      private final boolean defaultState;
+      private final int mask;
 
       public static int collectDefaults() {
          int flags = 0;
@@ -110,22 +110,22 @@ public class EMFModule extends SimpleModule {
       }
 
       Feature(final Boolean defaultState) {
-         _defaultState = defaultState;
-         _mask = (1 << ordinal());
+         this.defaultState = defaultState;
+         this.mask = (1 << ordinal());
       }
 
       public boolean enabledIn(final int flags) {
-         return (flags & _mask) != 0;
+         return (flags & mask) != 0;
       }
 
       public boolean enabledByDefault() {
-         return _defaultState;
+         return defaultState;
       }
 
-      public int getMask() { return _mask; }
+      public int getMask() { return mask; }
    }
 
-   protected final static int DEFAULT_FEATURES = Feature.collectDefaults();
+   protected static final int DEFAULT_FEATURES = Feature.collectDefaults();
 
    /**
     * Returns a pre configured mapper with the EMF module.
@@ -157,7 +157,7 @@ public class EMFModule extends SimpleModule {
       return mapper;
    }
 
-   protected int _moduleFeatures = DEFAULT_FEATURES;
+   protected int moduleFeatures = DEFAULT_FEATURES;
 
    private URIHandler handler;
 
@@ -207,12 +207,12 @@ public class EMFModule extends SimpleModule {
    }
 
    private EMFModule enable(final Feature f) {
-      _moduleFeatures |= f.getMask();
+      moduleFeatures |= f.getMask();
       return this;
    }
 
    private EMFModule disable(final Feature f) {
-      _moduleFeatures &= ~f.getMask();
+      moduleFeatures &= ~f.getMask();
       return this;
    }
 
@@ -223,10 +223,10 @@ public class EMFModule extends SimpleModule {
     * @return true if used
     */
    public final boolean isEnabled(final Feature f) {
-      return (_moduleFeatures & f.getMask()) != 0;
+      return (moduleFeatures & f.getMask()) != 0;
    }
 
-   public int getFeatures() { return _moduleFeatures; }
+   public int getFeatures() { return moduleFeatures; }
 
    /**
     * Configures the module with one of possible Feature.

@@ -33,15 +33,15 @@ import com.fasterxml.jackson.databind.type.MapLikeType;
 public class EMFSerializers extends Serializers.Base {
 
    private final EObjectPropertyMap.Builder propertiesBuilder;
-   private final JsonSerializer<EObject> _referenceSerializer;
-   private final JsonSerializer<Resource> _resourceSerializer = new ResourceSerializer();
-   private final JsonSerializer<?> _dataTypeSerializer = new EDataTypeSerializer();
-   private final JsonSerializer<?> _mapSerializer = new EMapStringSerializer();
-   private final JsonSerializer<?> _enumeratorSerializer = new EnumeratorSerializer();
+   private final JsonSerializer<EObject> referenceSerializer;
+   private final JsonSerializer<Resource> resourceSerializer = new ResourceSerializer();
+   private final JsonSerializer<?> dataTypeSerializer = new EDataTypeSerializer();
+   private final JsonSerializer<?> mapSerializer = new EMapStringSerializer();
+   private final JsonSerializer<?> enumeratorSerializer = new EnumeratorSerializer();
 
    public EMFSerializers(final EMFModule module) {
       this.propertiesBuilder = EObjectPropertyMap.Builder.from(module, module.getFeatures());
-      this._referenceSerializer = module.getReferenceSerializer();
+      this.referenceSerializer = module.getReferenceSerializer();
    }
 
    @Override
@@ -51,7 +51,7 @@ public class EMFSerializers extends Serializers.Base {
       final JsonSerializer<Object> elementValueSerializer) {
       if (type.isTypeOrSubTypeOf(EMap.class)) {
          if (type.getKeyType().isTypeOrSubTypeOf(String.class)) {
-            return _mapSerializer;
+            return mapSerializer;
          }
       }
 
@@ -64,34 +64,35 @@ public class EMFSerializers extends Serializers.Base {
       final BeanDescription beanDesc, final TypeSerializer elementTypeSerializer,
       final JsonSerializer<Object> elementValueSerializer) {
       if (type.getContentType().isReferenceType()) {
-         return new CollectionSerializer(type.getContentType(), false, null, (JsonSerializer) _referenceSerializer);
+         return new CollectionSerializer(type.getContentType(), false, null, (JsonSerializer) referenceSerializer);
       }
       return super.findCollectionSerializer(config, type, beanDesc, elementTypeSerializer, elementValueSerializer);
    }
 
    @Override
+   @SuppressWarnings("checkstyle:cyclomaticComplexity")
    public JsonSerializer<?> findSerializer(final SerializationConfig config, final JavaType type,
       final BeanDescription beanDesc) {
       if (type.isTypeOrSubTypeOf(Resource.class)) {
-         return _resourceSerializer;
+         return resourceSerializer;
       }
 
       if (type.isTypeOrSubTypeOf(Enumerator.class) && !type.isReferenceType()) {
          if (type.getRawClass() != EEnumLiteralImpl.class) {
-            return _enumeratorSerializer;
+            return enumeratorSerializer;
          }
       }
 
       if (type.isReferenceType() || type.isTypeOrSubTypeOf(ReferenceEntry.class)) {
-         return _referenceSerializer;
+         return referenceSerializer;
       }
 
       if (type.isTypeOrSubTypeOf(EcoreType.DataType.class)) {
-         return _dataTypeSerializer;
+         return dataTypeSerializer;
       }
 
       if (type.isTypeOrSubTypeOf(EObject.class)) {
-         return new EObjectSerializer(propertiesBuilder, _referenceSerializer);
+         return new EObjectSerializer(propertiesBuilder, referenceSerializer);
       }
 
       return super.findSerializer(config, type, beanDesc);
