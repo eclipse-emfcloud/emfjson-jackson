@@ -96,8 +96,8 @@ public class DynamicInstanceTest {
       EObject o1 = EcoreUtil.create(b);
       EObject o2 = EcoreUtil.create(b);
 
-      ((List) o.eGet(a.getEStructuralFeature("bs"))).add(o1);
-      ((List) o.eGet(a.getEStructuralFeature("bs"))).add(o2);
+      ((List<EObject>) o.eGet(a.getEStructuralFeature("bs"))).add(o1);
+      ((List<EObject>) o.eGet(a.getEStructuralFeature("bs"))).add(o2);
 
       assertEquals(expected, mapper.valueToTree(o));
    }
@@ -125,7 +125,7 @@ public class DynamicInstanceTest {
 
       assertSame(a, root.eClass());
 
-      assertEquals(2, ((List) root.eGet(a.getEStructuralFeature("bs"))).size());
+      assertEquals(2, ((List<?>) root.eGet(a.getEStructuralFeature("bs"))).size());
    }
 
 }

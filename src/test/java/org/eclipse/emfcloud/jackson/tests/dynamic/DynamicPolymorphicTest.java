@@ -49,6 +49,7 @@ public class DynamicPolymorphicTest {
       assertTrue(root.eIsSet(a.getEStructuralFeature("containBs")));
 
       EObject root_c1 = (EObject) root.eGet(a.getEStructuralFeature("containB"));
+      @SuppressWarnings("unchecked")
       List<EObject> root_c2 = (List<EObject>) root.eGet(a.getEStructuralFeature("containBs"));
 
       assertEquals("C", root_c1.eClass().getName());
