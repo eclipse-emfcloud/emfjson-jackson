@@ -1,0 +1,15 @@
+maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.12.1, Apache-2.0, approved, CQ22965
+maven/mavencentral/com.fasterxml.jackson.core/jackson-core/2.12.1, Apache-2.0, approved, CQ22966
+maven/mavencentral/com.fasterxml.jackson.core/jackson-databind/2.12.1, Apache-2.0, approved, CQ22967
+maven/mavencentral/com.google.code.findbugs/jsr305/3.0.2, Apache-2.0, approved, #20
+maven/mavencentral/com.google.errorprone/error_prone_annotations/2.2.0, Apache-2.0, approved, clearlydefined
+maven/mavencentral/com.google.guava/failureaccess/1.0.1, Apache-2.0, approved, CQ22654
+maven/mavencentral/com.google.guava/guava/27.1-jre, Apache-2.0 AND CC0-1.0, approved, CQ19110
+maven/mavencentral/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava, NONE, approved, #803
+maven/mavencentral/com.google.j2objc/j2objc-annotations/1.1, Apache-2.0, approved, CQ18765
+maven/mavencentral/org.checkerframework/checker-qual/2.5.2, MIT, approved, clearlydefined
+maven/mavencentral/org.codehaus.mojo/animal-sniffer-annotations/1.17, MIT, approved, clearlydefined
+maven/mavencentral/org.eclipse.emf/org.eclipse.emf.common/2.16.0, , approved, eclipse
+maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore.xcore.lib/1.4.0, , approved, eclipse
+maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore/2.19.0, , approved, eclipse
+maven/mavencentral/org.eclipse.xtext/org.eclipse.xtext.xbase.lib/2.19.0, , approved, eclipse
