@@ -7,7 +7,7 @@ pipeline {
     }
 
     stages {
-        stage ('Build') {
+        stage ('Build: Maven') {
             steps {
                 sh 'mvn clean install -Pm2 -B' 
             }
@@ -26,6 +26,22 @@ pipeline {
             	)
             }
         }
-        
+    }
+    
+    post {
+        always {
+            // Record & publish checkstyle issues
+            recordIssues  enabledForFailure: true, publishAllIssues: true,
+            tool: checkStyle(reportEncoding: 'UTF-8'),
+            qualityGates: [[threshold: 1, type: 'TOTAL', unstable: true]]
+
+            // Record & publish test results
+            withChecks('Tests') {
+                junit '**/surefire-reports/*.xml'
+            }
+
+            // Record maven,java warnings
+            recordIssues enabledForFailure: true, skipPublishingChecks:true, tools: [mavenConsole(), java()]
+        }
     }
 }
