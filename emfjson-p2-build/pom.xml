@@ -25,7 +25,7 @@
 		<maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
 
 		<buildQualifier>${maven.build.timestamp}</buildQualifier>
-		<unqualifiedVersion>1.3.1</unqualifiedVersion>
+		<unqualifiedVersion>2.0.0</unqualifiedVersion>
 	</properties>
 
 
