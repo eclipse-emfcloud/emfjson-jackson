@@ -35,8 +35,8 @@ The nightly builds are available as maven repository or p2 update site.
 
 ### Maven [![m2-deploy-status](https://img.shields.io/jenkins/build?jobUrl=https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-m2&label=m2-publish)](https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-m2/)
 
-- <i>Snapshots: </i> https://oss.sonatype.org/content/repositories/snapshots/org/eclipse/emfcloud/emfjson-jackson/
-- <i>Releases/Release Candidates: </i> https://oss.sonatype.org/content/repositories/releases/org/eclipse/emfcloud/emfjson-jackson/
+- Snapshots: https://oss.sonatype.org/content/repositories/snapshots/org/eclipse/emfcloud/emfjson-jackson/
+- Releases/RCs: https://oss.sonatype.org/content/repositories/releases/org/eclipse/emfcloud/emfjson-jackson/
 
 To use the Maven artifact add the following dependency to your POM file:
 
@@ -64,7 +64,7 @@ If you want to consume the nightly builds you have to configure the sonatype sna
 ### P2 Update Site [![p2-deploy-status](https://img.shields.io/jenkins/build?jobUrl=https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-p2&label=p2-publish)](https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-p2/)
 
 - Snapshots: https://download.eclipse.org/emfcloud/emfjson-jackson/p2/nightly/
-- Releases/Release Candidates: https://download.eclipse.org/emfcloud/emfjson-jackson/p2/releases/
+- Releases/RCs: https://download.eclipse.org/emfcloud/emfjson-jackson/p2/releases/
 
 This update sites contain the bundle and feature for emfjson-jackson and Jackson. 
 
