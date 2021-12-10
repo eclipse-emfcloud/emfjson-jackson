@@ -37,7 +37,7 @@ public final class JsonAnnotations {
    /**
     * Returns the name that should be use to serialize the property.
     *
-    * @param element
+    * @param element any element
     * @return name of property
     */
    public static String getElementName(final ENamedElement element) {
@@ -62,7 +62,7 @@ public final class JsonAnnotations {
    /**
     * Returns true if the feature should not be serialize.
     *
-    * @param feature
+    * @param feature any feature
     * @return true if should not be serialize
     */
    public static boolean shouldIgnore(final EStructuralFeature feature) {
@@ -72,7 +72,7 @@ public final class JsonAnnotations {
    /**
     * Returns the property that should be use to store the type information of the classifier.
     *
-    * @param classifier
+    * @param classifier any classifier
     * @return the type information property
     */
    @SuppressWarnings("checkstyle:cyclomaticComplexity")
@@ -119,7 +119,7 @@ public final class JsonAnnotations {
     * Returns true if the classifier type information should not be serialize.
     * This is true when the classifier possesses an annotation @JsonType with include = "false".
     *
-    * @param classifier
+    * @param classifier any classifier
     * @return true if type info should not be serialize
     */
    public static boolean shouldIgnoreType(final EClassifier classifier) {
@@ -131,7 +131,7 @@ public final class JsonAnnotations {
    /**
     * Returns the property that should be use to serialize the identity of the object.
     *
-    * @param classifier
+    * @param classifier any classifier
     * @return the identity property
     */
    public static String getIdentityProperty(final EClassifier classifier) {

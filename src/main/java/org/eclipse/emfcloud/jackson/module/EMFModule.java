@@ -140,7 +140,7 @@ public class EMFModule extends SimpleModule {
     * Returns a pre configured mapper using the EMF module and the specified jackson factory.
     * This method can be used to work with formats others than JSON (such as YAML).
     *
-    * @param factory
+    * @param factory Jackson factory
     * @return mapper
     */
    public static ObjectMapper setupDefaultMapper(final JsonFactory factory) {

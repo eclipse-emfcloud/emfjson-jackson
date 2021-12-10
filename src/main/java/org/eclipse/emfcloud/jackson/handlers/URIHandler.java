@@ -21,7 +21,8 @@ public interface URIHandler {
    /**
     * Returns the URI {@link URI#resolve(URI) resolved} against the base URI.
     *
-    * @param uri the URI to resolve.
+    * @param baseURI the base URI against which the URI is resolved.
+    * @param uri     the URI to resolve.
     * @return the URI resolved against the base URI.
     * @see URI#resolve(URI)
     */
@@ -30,7 +31,8 @@ public interface URIHandler {
    /**
     * Returns the URI {@link URI#deresolve(URI) deresolved} against the base URI.
     *
-    * @param uri the URI to resolve.
+    * @param baseURI the base URI against which the URI is deresolved.
+    * @param uri     the URI to resolve.
     * @return the URI resolved against the base URI.
     * @see URI#deresolve(URI)
     */

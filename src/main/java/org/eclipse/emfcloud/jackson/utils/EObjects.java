@@ -34,9 +34,9 @@ public final class EObjects {
     * Set or add a value to an object reference. The value must be
     * an EObject.
     *
-    * @param owner
-    * @param reference
-    * @param value
+    * @param owner     EObject owning the reference
+    * @param reference the reference of the value to set
+    * @param value     value to set for the reference
     */
    public static void setOrAdd(final EObject owner, final EReference reference, final Object value) {
       if (value != null) {
@@ -56,8 +56,9 @@ public final class EObjects {
     * Checks that the contained object is in a different resource than it's owner, making
     * it a contained proxy.
     *
-    * @param owner
-    * @param contained
+    * @param ctxt      the databind context
+    * @param owner     EObject owning the contained object
+    * @param contained contained object to be evaluated
     * @return true if proxy
     */
    public static boolean isContainmentProxy(final DatabindContext ctxt, final EObject owner, final EObject contained) {
@@ -76,9 +77,9 @@ public final class EObjects {
     *
     * @param key   of entry
     * @param value of entry
+    * @param type  of entry
     * @return entry
     */
-
    public static EObject createEntry(final String key, final Object value, final EClass type) {
       if (type == EcorePackage.Literals.ESTRING_TO_STRING_MAP_ENTRY) {
 
