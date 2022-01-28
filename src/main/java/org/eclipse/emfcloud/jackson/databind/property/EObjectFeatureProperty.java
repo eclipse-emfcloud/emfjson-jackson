@@ -16,6 +16,7 @@ import static org.eclipse.emfcloud.jackson.module.EMFModule.Feature.OPTION_SERIA
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -57,17 +58,20 @@ public class EObjectFeatureProperty extends EObjectProperty {
       final Resource resource)
       throws IOException {
       final JsonDeserializer<Object> deserializer = ctxt.findContextualValueDeserializer(javaType, null);
+      JsonToken token = null;
 
       if (jp.getCurrentToken() == JsonToken.FIELD_NAME) {
-         jp.nextToken();
+         token = jp.nextToken();
       }
 
       if (jp.getCurrentToken() == JsonToken.VALUE_NULL) {
          return;
       }
 
+      boolean isMap = false;
       switch (FeatureKind.get(feature)) {
          case MAP:
+            isMap = true;
          case MANY_CONTAINMENT:
          case SINGLE_CONTAINMENT: {
             EMFContext.setFeature(ctxt, feature);
@@ -81,6 +85,10 @@ public class EObjectFeatureProperty extends EObjectProperty {
             }
 
             if (feature.isMany()) {
+               if (token != JsonToken.START_ARRAY && !isMap) {
+                  throw new JsonParseException(jp, "Expected START_ARRAY token, got " + token);
+               }
+
                deserializer.deserialize(jp, ctxt, current.eGet(feature));
             } else {
                Object value = deserializer.deserialize(jp, ctxt);
