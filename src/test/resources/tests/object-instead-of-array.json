@@ -1,0 +1,8 @@
+{
+  "eClass": "http://www.emfjson.org/jackson/model#//Node",
+  "label": "foo",
+  "child": {
+    "eClass": "http://www.emfjson.org/jackson/model#//Node",
+    "label": "bar"
+  }
+}

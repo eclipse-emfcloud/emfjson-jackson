@@ -23,7 +23,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.WrappedException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -357,5 +359,17 @@ public class ReferenceTest {
       assertThat(resource.getContents())
          .hasSize(1)
          .hasOnlyElementsOfType(User.class);
+   }
+
+   @Test
+   public void testLoadObjectInsteadOfArray() {
+      try {
+         resourceSet.getResource(
+             URI.createURI("src/test/resources/tests/object-instead-of-array.json"), true);
+      } catch (final WrappedException e) {
+         final Throwable cause = e.getCause();
+         assertThat(cause).isInstanceOf(JsonParseException.class);
+         assertThat(cause.getMessage()).contains("Expected START_ARRAY token");
+      }
    }
 }
