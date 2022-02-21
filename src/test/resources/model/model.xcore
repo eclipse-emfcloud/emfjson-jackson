@@ -11,6 +11,8 @@ package org.eclipse.emfcloud.jackson.junit.model
 import org.eclipse.emf.ecore.EByteArray
 import org.eclipse.emf.ecore.EFeatureMapEntry
 import java.util.Map
+import java.time.format.DateTimeFormatter
+import java.time.LocalDate
 
 class User {
 	id String userId
@@ -62,6 +64,7 @@ class ETypes {
 	contains StringMap[*] stringMapValues
 	contains DataTypeMap[*] dataTypeMapValues
 	unique URI[] uris
+	ELocalDate eLocalDate
 }
 
 class StringMap wraps Map.Entry {
@@ -96,6 +99,13 @@ type URI wraps org.eclipse.emf.common.util.URI
 type UserType wraps String
 type ObjectType wraps Object
 type ObjectArrayType wraps Object[]
+type ELocalDate wraps java.time.LocalDate
+	convert {
+		if (it === null) "" else DateTimeFormatter.ISO_LOCAL_DATE.format(it);
+	}
+	create {
+		if (it === null || it.trim().empty) null else LocalDate.parse(it, DateTimeFormatter.ISO_LOCAL_DATE);
+	}
 
 class PrimaryObject {
 	String name

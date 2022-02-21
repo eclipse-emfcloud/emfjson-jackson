@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -400,5 +401,37 @@ public class ValueTest {
       JsonNode result = mapper.valueToTree(resource);
 
       assertThat(result.get("objectType").isNumber()).isTrue();
+   }
+
+   @Test
+   public void testLocalDateValue() {
+      Resource resource = resourceSet.createResource(URI.createURI("tests/test.json"));
+
+      ETypes valueObject = ModelFactory.eINSTANCE.createETypes();
+      valueObject.setELocalDate(LocalDate.of(2021, 9, 13));
+      resource.getContents().add(valueObject);
+
+      JsonNode result = mapper.valueToTree(resource);
+
+      assertEquals("2021-09-13", result.get("eLocalDate").asText());
+   }
+
+   @Test
+   public void testLoadLocalDateValue() throws IOException {
+      JsonNode data = mapper.createObjectNode()
+         .put("eClass", "http://www.emfjson.org/jackson/model#//ETypes")
+         .put("eLocalDate", "2021-09-13");
+
+      Resource resource = resourceSet.createResource(URI.createURI("tests/test.json"));
+      resource.load(new ByteArrayInputStream(mapper.writeValueAsBytes(data)), null);
+
+      assertEquals(1, resource.getContents().size());
+
+      EObject root = resource.getContents().get(0);
+      assertEquals(ModelPackage.Literals.ETYPES, root.eClass());
+
+      LocalDate value = ((ETypes) root).getELocalDate();
+
+      assertEquals(LocalDate.of(2021, 9, 13), value);
    }
 }

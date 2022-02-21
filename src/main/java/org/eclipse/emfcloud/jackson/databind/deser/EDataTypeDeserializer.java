@@ -16,7 +16,6 @@ import static org.eclipse.emf.ecore.EcorePackage.Literals.EJAVA_OBJECT;
 import java.io.IOException;
 
 import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emfcloud.jackson.databind.EMFContext;
 
@@ -25,6 +24,11 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
 public class EDataTypeDeserializer extends JsonDeserializer<Object> {
+
+   public static boolean isJavaLangType(final EDataType dataType) {
+      String instanceClassName = dataType.getInstanceClassName();
+      return instanceClassName.startsWith("java.lang.") || instanceClassName.indexOf('.') < 0;
+   }
 
    @Override
    public Object deserialize(final JsonParser jp, final DeserializationContext ctxt) throws IOException {
@@ -35,7 +39,7 @@ public class EDataTypeDeserializer extends JsonDeserializer<Object> {
       }
       Class<?> type = dataType.getInstanceClass();
 
-      if (type == null || dataType instanceof EEnum || EJAVA_CLASS.equals(dataType)
+      if (type == null || (!isJavaLangType(dataType)) || EJAVA_CLASS.equals(dataType)
          || EJAVA_OBJECT.equals(dataType)) {
          return EcoreUtil.createFromString(dataType, jp.getText());
       }

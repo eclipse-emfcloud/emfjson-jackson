@@ -16,22 +16,27 @@ import static org.eclipse.emfcloud.jackson.module.EMFModule.Feature.OPTION_SERIA
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JsonParseException;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emfcloud.jackson.databind.EMFContext;
+import org.eclipse.emfcloud.jackson.databind.deser.EDataTypeDeserializer;
 import org.eclipse.emfcloud.jackson.databind.deser.ReferenceEntries;
 import org.eclipse.emfcloud.jackson.databind.deser.ReferenceEntry;
+import org.eclipse.emfcloud.jackson.databind.ser.EDataTypeSerializer;
 import org.eclipse.emfcloud.jackson.databind.type.FeatureKind;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.impl.UnknownSerializer;
@@ -52,12 +57,28 @@ public class EObjectFeatureProperty extends EObjectProperty {
       this.defaultValues = OPTION_SERIALIZE_DEFAULT_VALUE.enabledIn(features);
    }
 
+   private static final EDataTypeDeserializer EDATA_TYPE_DESERIALIZER = new EDataTypeDeserializer();
+
+   private boolean shouldUseEFactory(final EDataType dataType) {
+      return dataType.isSerializable() && dataType.getEPackage() != EcorePackage.eINSTANCE
+         && (!EDataTypeDeserializer.isJavaLangType(dataType));
+   }
+
+   private JsonDeserializer<Object> findValueDeserializer(final DeserializationContext ctxt)
+      throws JsonMappingException {
+      if ((!feature.isMany()) && feature instanceof EAttribute
+         && shouldUseEFactory(((EAttribute) feature).getEAttributeType())) {
+         return EDATA_TYPE_DESERIALIZER;
+      }
+      return ctxt.findContextualValueDeserializer(javaType, null);
+   }
+
    @Override
    @SuppressWarnings({ "checkstyle:cyclomaticComplexity", "checkstyle:fallThrough" })
    public void deserializeAndSet(final JsonParser jp, final EObject current, final DeserializationContext ctxt,
       final Resource resource)
       throws IOException {
-      final JsonDeserializer<Object> deserializer = ctxt.findContextualValueDeserializer(javaType, null);
+      final JsonDeserializer<Object> deserializer = findValueDeserializer(ctxt);
       JsonToken token = null;
 
       if (jp.getCurrentToken() == JsonToken.FIELD_NAME) {
@@ -120,11 +141,20 @@ public class EObjectFeatureProperty extends EObjectProperty {
       }
    }
 
+   private static final EDataTypeSerializer EDATA_TYPE_SERIALIZER = new EDataTypeSerializer();
+
+   private JsonSerializer<Object> findValueSerializer(final SerializerProvider provider) throws JsonMappingException {
+      if (feature instanceof EAttribute && shouldUseEFactory(((EAttribute) feature).getEAttributeType())) {
+         return EDATA_TYPE_SERIALIZER;
+      }
+      return provider.findValueSerializer(javaType);
+   }
+
    @Override
    public void serialize(final EObject bean, final JsonGenerator jg, final SerializerProvider provider)
       throws IOException {
       if (serializer == null) {
-         serializer = provider.findValueSerializer(javaType);
+         serializer = findValueSerializer(provider);
       }
 
       EMFContext.setParent(provider, bean);
