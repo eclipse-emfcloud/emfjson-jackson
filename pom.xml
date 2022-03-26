@@ -7,7 +7,7 @@
 	<artifactId>emfjson-jackson</artifactId>
 	<packaging>jar</packaging>
 	<version>2.1.0-SNAPSHOT</version>
-
+	<name>EMF JSON De-/Serialization using Jackson</name>
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
@@ -162,6 +162,27 @@
 
 				<plugins>
 					<plugin>
+    					<groupId>biz.aQute.bnd</groupId>
+    					<artifactId>bnd-maven-plugin</artifactId>
+						<version>6.2.0</version>
+						<extensions>true</extensions>
+						<executions>
+							<execution>
+								<id>jar</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<bnd><![CDATA[
+Import-Package: com.fasterxml.jackson.*;version="[2.6.0,3.0.0)",\
+	*
+Export-Package: org.eclipse.emfcloud.jackson.*
+							]]></bnd>
+						</configuration>
+					</plugin>
+					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
 						<version>3.1</version>
@@ -254,24 +275,6 @@
 									<directory>src/test/java-gen</directory>
 								</fileset>
 							</filesets>
-						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.felix</groupId>
-						<artifactId>maven-bundle-plugin</artifactId>
-						<extensions>true</extensions>
-						<version>3.0.0</version>
-						<configuration>
-							<instructions>
-								<Bundle-SymbolicName>org.eclipse.emfcloud</Bundle-SymbolicName>
-								<Bundle-Name>emfjson-jackson</Bundle-Name>
-								<Bundle-Version>${project.version}</Bundle-Version>
-								<Import-Package>
-									com.fasterxml.jackson.*;version="[2.6.0,
-									3.0.0)",
-									*
-								</Import-Package>
-							</instructions>
 						</configuration>
 					</plugin>
 					<plugin>
