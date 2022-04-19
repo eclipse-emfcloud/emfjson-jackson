@@ -12,6 +12,7 @@ package org.eclipse.emfcloud.jackson;
 
 import org.eclipse.emfcloud.jackson.databind.type.EcoreTypeFactoryTest;
 import org.eclipse.emfcloud.jackson.tests.AnnotationTest;
+import org.eclipse.emfcloud.jackson.tests.ArrayTest;
 import org.eclipse.emfcloud.jackson.tests.ContainmentTest;
 import org.eclipse.emfcloud.jackson.tests.EnumTest;
 import org.eclipse.emfcloud.jackson.tests.ExternalReferencesTest;
@@ -60,6 +61,7 @@ import org.junit.runners.Suite.SuiteClasses;
    ReaderTest.class,
    ReferenceTest.class,
    ValueTest.class,
+   ArrayTest.class,
 
    // type factory
    EcoreTypeFactoryTest.class,
@@ -88,4 +90,5 @@ import org.junit.runners.Suite.SuiteClasses;
    CustomDeserializersTest.class,
    CustomSerializersTest.class
 })
+
 public class TestSuite {}

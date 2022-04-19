@@ -11,6 +11,7 @@
 
 package org.eclipse.emfcloud.jackson.databind.type;
 
+import static org.eclipse.emf.ecore.EcorePackage.Literals.EBYTE_ARRAY;
 import static org.eclipse.emf.ecore.EcorePackage.Literals.EJAVA_CLASS;
 import static org.eclipse.emf.ecore.EcorePackage.Literals.EJAVA_OBJECT;
 
@@ -143,13 +144,8 @@ public class EcoreTypeFactory {
       Class<?> rawType = classifier.getInstanceClass();
 
       if (classifier instanceof EDataType) {
-         if (rawType == null || classifier == EJAVA_CLASS || classifier == EJAVA_OBJECT) {
+         if (rawType == null || classifier == EJAVA_CLASS || classifier == EJAVA_OBJECT || classifier == EBYTE_ARRAY) {
             rawType = EcoreType.DataType.class;
-         } else {
-            // handle e.g. EByteArray byte[]
-            if (rawType.isArray()) {
-               rawType = EcoreType.DataType.class;
-            }
          }
       } else if (rawType == null) {
          rawType = EObject.class;
