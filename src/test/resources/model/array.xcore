@@ -1,0 +1,26 @@
+@Ecore(nsURI="http://www.emfjson.org/jackson/model")
+@GenModel(
+    modelDirectory="emfjson-jackson/src/test/java-gen",
+    updateClasspath="false",
+    bundleManifest="false",
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl",
+    complianceLevel="8.0"
+)
+package org.eclipse.emfcloud.jackson.junit.array
+
+import org.eclipse.emf.ecore.EByteArray
+
+class ArrayHost {
+	double1D d1
+	double2D d2
+	double3D d3
+	string2D s2
+	EByteArray b
+}
+
+
+type double1D wraps Double[]
+type double2D wraps Double[][]
+type double3D wraps Double[][][]
+
+type string2D wraps String[][]
