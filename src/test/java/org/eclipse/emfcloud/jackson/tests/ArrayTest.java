@@ -1,8 +1,24 @@
+/*******************************************************************************
+ * Copyright (c) 2022 Data In Motion Consulting GmbH and others.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v. 2.0 which is available at
+ * https://www.eclipse.org/legal/epl-2.0, or the MIT License which is
+ * available at https://opensource.org/licenses/MIT.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR MIT
+ *******************************************************************************/
 package org.eclipse.emfcloud.jackson.tests;
 
-import static org.eclipse.emfcloud.jackson.module.EMFModule.Feature.OPTION_SERIALIZE_DEFAULT_VALUE;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emfcloud.jackson.junit.array.ArrayFactory;
 import org.eclipse.emfcloud.jackson.junit.array.ArrayHost;
 import org.eclipse.emfcloud.jackson.support.StandardFixture;
@@ -19,6 +35,7 @@ public class ArrayTest {
    public static StandardFixture fixture = new StandardFixture();
 
    private final ObjectMapper mapper = fixture.mapper();
+   private final ResourceSet resourceSet = fixture.getResourceSet();
 
    @Test
    public void testByteArray() {
@@ -30,7 +47,7 @@ public class ArrayTest {
       expected.put("b", "0102");
 
       assertEquals(expected,
-         fixture.mapper(OPTION_SERIALIZE_DEFAULT_VALUE, true)
+         fixture.mapper()
             .valueToTree(u));
    }
 
@@ -45,8 +62,7 @@ public class ArrayTest {
       a.add(1.1).add(1.2);
 
       assertEquals(expected,
-         fixture.mapper(OPTION_SERIALIZE_DEFAULT_VALUE, true)
-            .valueToTree(u));
+         fixture.mapper().valueToTree(u));
    }
 
    @Test
@@ -61,7 +77,7 @@ public class ArrayTest {
       a.addArray().add(2.1).add(2.2);
 
       assertEquals(expected,
-         fixture.mapper(OPTION_SERIALIZE_DEFAULT_VALUE, true)
+         fixture.mapper()
             .valueToTree(u));
    }
 
@@ -81,7 +97,7 @@ public class ArrayTest {
       a2.addArray().add(2.21).add(2.22);
 
       assertEquals(expected,
-         fixture.mapper(OPTION_SERIALIZE_DEFAULT_VALUE, true)
+         fixture.mapper()
             .valueToTree(u));
    }
 
@@ -97,7 +113,46 @@ public class ArrayTest {
       a.addArray().add("2.1").add("2.2");
 
       assertEquals(expected,
-         fixture.mapper(OPTION_SERIALIZE_DEFAULT_VALUE, true)
+         fixture.mapper()
             .valueToTree(u));
    }
+
+   @Test
+   public void testLoad2DDoubleArrayValues() throws IOException {
+      String data = "{\n" +
+         "  \"eClass\": \"http://www.emfjson.org/jackson/model#//ArrayHost\",\n" +
+         "  \"d2\": [ \n" +
+         "    [1.1, 1.2], \n" +
+         "    [2.1, 2.2] ]\n" +
+         "}";
+
+      Resource resource = resourceSet.createResource(URI.createURI("tests/test.json"));
+      resource.load(new ByteArrayInputStream(data.getBytes()), null);
+
+      ArrayHost host = (ArrayHost) resource.getContents().get(0);
+      Double[][] d2 = host.getD2();
+      assertThat(d2).hasSize(2);
+      assertThat(d2[0]).containsExactly(1.1, 1.2);
+      assertThat(d2[1]).containsExactly(2.1, 2.2);
+   }
+
+   @Test
+   public void testLoad2DStringArrayValues() throws IOException {
+      String data = "{\n" +
+         "  \"eClass\": \"http://www.emfjson.org/jackson/model#//ArrayHost\",\n" +
+         "  \"s2\": [ \n" +
+         "    [\"1.1\", \"1.2\"], \n" +
+         "    [\"2.1\", \"2.2\"] ]\n" +
+         "}";
+
+      Resource resource = resourceSet.createResource(URI.createURI("tests/test.json"));
+      resource.load(new ByteArrayInputStream(data.getBytes()), null);
+
+      ArrayHost host = (ArrayHost) resource.getContents().get(0);
+      String[][] s2 = host.getS2();
+      assertThat(s2).hasSize(2);
+      assertThat(s2[0]).containsExactly("1.1", "1.2");
+      assertThat(s2[1]).containsExactly("2.1", "2.2");
+   }
+
 }
