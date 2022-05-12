@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2021 Guillaume Hillairet and others.
+ * Copyright (c) 2019-2022 Guillaume Hillairet and others.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -225,5 +225,24 @@ public class MapTest {
          .isNotNull();
       assertThat(types.getDataTypeMapValues().map())
          .contains(entry("test.json", "hello"));
+   }
+
+   /**
+    * Test the edge case when an EMap has an entry with null key
+    * (not compatible with json)
+    */
+   @Test
+   public void testSaveMapWithNullKey() {
+      JsonNode expected = mapper.createObjectNode()
+         .put("eClass", "http://www.emfjson.org/jackson/model#//ETypes")
+         .set("dataTypeMapValues", mapper.createObjectNode()
+            .put("", "hello"));
+
+      ETypes types = ModelFactory.eINSTANCE.createETypes();
+      types.getDataTypeMapValues().put(null, "hello");
+
+      JsonNode actual = mapper.valueToTree(types);
+      assertThat(actual)
+         .isEqualTo(expected);
    }
 }

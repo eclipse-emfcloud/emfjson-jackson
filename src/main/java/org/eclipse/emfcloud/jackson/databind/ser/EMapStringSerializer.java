@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2021 Guillaume Hillairet and others.
+ * Copyright (c) 2019-2022 Guillaume Hillairet and others.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -19,6 +19,11 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
+/**
+ * @deprecated use {@link EMapSerializer} instead for configurability and resilience.
+ * @see org.eclipse.emfcloud.jackson.databind.ser.EMFSerializers EMapSerializer example in findMapLikeSerializer.
+ */
+@Deprecated
 public class EMapStringSerializer extends JsonSerializer<EList<Map.Entry<String, ?>>> {
 
    @Override

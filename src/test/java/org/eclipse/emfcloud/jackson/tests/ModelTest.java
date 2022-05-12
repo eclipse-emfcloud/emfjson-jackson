@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2021 Guillaume Hillairet and others.
+ * Copyright (c) 2019-2022 Guillaume Hillairet and others.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emfcloud.jackson.databind.ser.NullKeySerializer;
 import org.eclipse.emfcloud.jackson.module.EMFModule;
 import org.eclipse.emfcloud.jackson.resource.JsonResourceFactory;
 import org.junit.Before;
@@ -60,6 +61,8 @@ public class ModelTest {
       dateFormat.setTimeZone(TimeZone.getDefault());
 
       mapper.setDateFormat(dateFormat);
+      // add default serializer for null EMap key
+      mapper.getSerializerProvider().setNullKeySerializer(new NullKeySerializer());
 
       resourceSet.getURIConverter()
          .getURIMap()
