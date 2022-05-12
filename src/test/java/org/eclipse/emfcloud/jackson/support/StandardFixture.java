@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2021 Guillaume Hillairet and others.
+ * Copyright (c) 2019-2022 Guillaume Hillairet and others.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.emfcloud.jackson.databind.ser.NullKeySerializer;
 import org.eclipse.emfcloud.jackson.junit.generics.GenericsPackage;
 import org.eclipse.emfcloud.jackson.junit.model.ModelPackage;
 import org.eclipse.emfcloud.jackson.module.EMFModule;
@@ -79,6 +80,8 @@ public class StandardFixture extends ExternalResource {
 
       mapper.setDateFormat(dateFormat);
       mapper.setTimeZone(TimeZone.getDefault());
+      // add default serializer for null EMap key
+      mapper.getSerializerProvider().setNullKeySerializer(new NullKeySerializer());
 
       return mapper;
    }

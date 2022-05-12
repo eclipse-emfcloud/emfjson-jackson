@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2021 Guillaume Hillairet and others.
+ * Copyright (c) 2019-2022 Guillaume Hillairet and others.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -23,6 +23,7 @@ import org.eclipse.emfcloud.jackson.databind.deser.EcoreReferenceDeserializer;
 import org.eclipse.emfcloud.jackson.databind.deser.ReferenceEntry;
 import org.eclipse.emfcloud.jackson.databind.ser.EMFSerializers;
 import org.eclipse.emfcloud.jackson.databind.ser.EcoreReferenceSerializer;
+import org.eclipse.emfcloud.jackson.databind.ser.NullKeySerializer;
 import org.eclipse.emfcloud.jackson.handlers.BaseURIHandler;
 import org.eclipse.emfcloud.jackson.handlers.URIHandler;
 
@@ -153,6 +154,8 @@ public class EMFModule extends SimpleModule {
       mapper.setDateFormat(dateFormat);
       mapper.setTimeZone(TimeZone.getDefault());
       mapper.registerModule(new EMFModule());
+      // add default serializer for null EMap key
+      mapper.getSerializerProvider().setNullKeySerializer(new NullKeySerializer());
 
       return mapper;
    }
