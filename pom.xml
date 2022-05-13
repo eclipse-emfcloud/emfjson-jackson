@@ -176,6 +176,7 @@
 						</executions>
 						<configuration>
 							<bnd><![CDATA[
+Bundle-SymbolicName: ${project.groupId}.${project.artifactId}
 Import-Package: com.fasterxml.jackson.*;version="[2.6.0,3.0.0)",\
 	*
 Export-Package: org.eclipse.emfcloud.jackson.*
