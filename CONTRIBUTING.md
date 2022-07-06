@@ -41,3 +41,22 @@ In the commit message you should also reference the corresponding issue, e.g. us
 Please use the absolute URL of the issue instead of just `#16`, as using the absolute URL will allow to correctly reference issues irrespectively from where you open the pull request.
 
 Please make sure you read the [guide for a good commit message](https://chris.beams.io/posts/git-commit/).
+
+## Guide for Commiters
+
+>As a committer, can I directly merge the PR that seems relevant to me, or should I make sure with the rest of the team that it can be inserted in the sprint's scope ?
+ 
+For your own PRs a positive peer review of another committer is required before merging. If you are reviewing external PRs it depends on the size of the change. 
+For simple bug fixes, documentation updates etc. just go ahead and merge them after you have given your approval. For larger or conflicting changes (or if you are unsure) 
+please tag one of the project leads (@eneufeld, @planger, @koegel ).
+
+>How can I check that the team is not in the middle of a release process nor in a code freeze ?
+ 
+In case of a pending release or other code freeze there should be a general announcement on the default communication channels (discussions + dev mailing list).
+
+>Is there any manual action I should take regarding https://github.com/orgs/eclipse-emfcloud/projects/2 ? Or is only the project leader in charge of it ?
+ 
+Managing the project board is mostly the responsibility of the project leads. However, there are a couple of actions you can take to ease the process for them:
+If possible, always create an accompanying issue for your PR. Issues are easier to track and manage in the project board
+When you create new issues please directly add them to the `EMFCloud` project. Please self-assign if you plan to work on the issue.
+If your PR resolves the corresponding issue please add a `Fixes` notice to the commit message/PR description. (e.g. `Fixes #123` or `Closes #123)
