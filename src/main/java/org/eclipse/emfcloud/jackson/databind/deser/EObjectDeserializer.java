@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2021 Guillaume Hillairet and others.
+ * Copyright (c) 2019-2022 Guillaume Hillairet and others.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -79,7 +79,7 @@ public class EObjectDeserializer extends JsonDeserializer<EObject> {
          } else if (property != null && current != null) {
             property.deserializeAndSet(jp, current, ctxt, resource);
          } else if (property == null && current != null) {
-            handleUnknownProperty(jp, resource, ctxt);
+            handleUnknownProperty(jp, resource, ctxt, current.eClass());
          } else {
             if (buffer == null) {
                buffer = new TokenBuffer(jp);
@@ -116,7 +116,7 @@ public class EObjectDeserializer extends JsonDeserializer<EObject> {
          if (property != null) {
             property.deserializeAndSet(jp, intoValue, ctxt, resource);
          } else {
-            handleUnknownProperty(jp, resource, ctxt);
+            handleUnknownProperty(jp, resource, ctxt, intoValue.eClass());
          }
       }
 
@@ -163,7 +163,7 @@ public class EObjectDeserializer extends JsonDeserializer<EObject> {
          if (property != null) {
             property.deserializeAndSet(jp, object, ctxt, resource);
          } else {
-            handleUnknownProperty(jp, resource, ctxt);
+            handleUnknownProperty(jp, resource, ctxt, object.eClass());
          }
 
          nextToken = jp.nextToken();
@@ -174,10 +174,10 @@ public class EObjectDeserializer extends JsonDeserializer<EObject> {
       return object;
    }
 
-   private void handleUnknownProperty(final JsonParser jp, final Resource resource, final DeserializationContext ctxt)
+   private void handleUnknownProperty(final JsonParser jp, final Resource resource, final DeserializationContext ctxt, EClass currentEClass)
       throws IOException {
       if (resource != null && ctxt.getConfig().hasDeserializationFeatures(FAIL_ON_UNKNOWN_PROPERTIES.getMask())) {
-         resource.getErrors().add(new JSONException("Unknown feature " + jp.getCurrentName(), jp.getCurrentLocation()));
+         resource.getErrors().add(new JSONException(String.format("Unknown feature '%s' for %s" , jp.getCurrentName(), EcoreUtil.getURI(currentEClass)), jp.getCurrentLocation()));
       }
       // we didn't find a feature so consume
       // the field and move on
