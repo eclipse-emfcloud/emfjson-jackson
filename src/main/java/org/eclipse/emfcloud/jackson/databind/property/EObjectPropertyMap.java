@@ -193,7 +193,7 @@ public final class EObjectPropertyMap {
          EcoreTypeInfo currentTypeInfo = null;
 
          if (type != null && !JsonAnnotations.shouldIgnoreType(type)) {
-            currentTypeInfo = JsonAnnotations.getTypeProperty(type);
+            currentTypeInfo = JsonAnnotations.getTypeProperty(type, typeInfo.getValueReader(), typeInfo.getValueWriter());
          }
 
          if (currentTypeInfo == null) {

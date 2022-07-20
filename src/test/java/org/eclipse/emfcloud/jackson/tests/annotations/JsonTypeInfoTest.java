@@ -30,20 +30,17 @@ import static org.eclipse.emfcloud.jackson.support.Utils.uriOf;
 import java.io.IOException;
 import java.util.List;
 
+import com.google.common.base.CaseFormat;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emfcloud.jackson.junit.annotations.AnnotationsFactory;
-import org.eclipse.emfcloud.jackson.junit.annotations.AnnotationsPackage;
-import org.eclipse.emfcloud.jackson.junit.annotations.Container;
-import org.eclipse.emfcloud.jackson.junit.annotations.TestA;
-import org.eclipse.emfcloud.jackson.junit.annotations.TestC;
-import org.eclipse.emfcloud.jackson.junit.annotations.TestD;
-import org.eclipse.emfcloud.jackson.junit.annotations.TestE;
-import org.eclipse.emfcloud.jackson.junit.annotations.TestF;
-import org.eclipse.emfcloud.jackson.junit.annotations.TestTypeName;
+import org.eclipse.emfcloud.jackson.annotations.EcoreTypeInfo;
+import org.eclipse.emfcloud.jackson.databind.EMFContext;
+import org.eclipse.emfcloud.jackson.junit.annotations.*;
 import org.eclipse.emfcloud.jackson.junit.annotations.impl.BarTypeClassImpl;
 import org.eclipse.emfcloud.jackson.junit.annotations.impl.BarTypeNameImpl;
 import org.eclipse.emfcloud.jackson.junit.annotations.impl.FooTypeClassImpl;
@@ -52,6 +49,7 @@ import org.eclipse.emfcloud.jackson.junit.annotations.impl.TestTypeClassImpl;
 import org.eclipse.emfcloud.jackson.junit.annotations.impl.TestTypeNameImpl;
 import org.eclipse.emfcloud.jackson.module.EMFModule;
 import org.eclipse.emfcloud.jackson.resource.JsonResourceFactory;
+import org.eclipse.emfcloud.jackson.utils.ValueReader;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -380,5 +378,29 @@ public class JsonTypeInfoTest {
 
       List<TestTypeName> values = mapper.readValue(data.toString(), new TypeReference<List<TestTypeName>>() {});
       assertThat(values).isNotEmpty();
+   }
+
+   @Test
+   public void testCustomValueReader() throws IOException {
+      final ValueReader<String, EClass> classReader = (str, ctxt) -> {
+         // my-test-class -> MyTestClass
+         final String className = CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, str);
+         return EMFContext.findEClassByName(ctxt, className);
+      };
+      final EMFModule module = new EMFModule();
+      module.setTypeInfo(new EcoreTypeInfo(EcoreTypeInfo.PROPERTY, classReader));
+      final ObjectMapper mapper = new ObjectMapper().registerModule(module);
+
+      final String value = "foo";
+      final JsonNode data = mapper.createObjectNode()
+            .put("eClass", "test-g")
+            .put("value", value);
+      final EObject read = mapper.reader()
+            .withAttribute(RESOURCE_SET, resourceSet)
+            .readValue(data, EObject.class);
+
+      assertThat(read).isInstanceOf(TestG.class);
+      final TestG testG = (TestG) read;
+      assertThat(testG.getValue()).isEqualTo(value);
    }
 }
