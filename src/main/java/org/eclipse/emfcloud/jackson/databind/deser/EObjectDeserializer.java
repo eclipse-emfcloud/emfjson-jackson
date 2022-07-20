@@ -17,6 +17,7 @@ import static org.eclipse.emfcloud.jackson.databind.EMFContext.getResource;
 import java.io.IOException;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -60,7 +61,15 @@ public class EObjectDeserializer extends JsonDeserializer<EObject> {
       if (feature == null && defaultType != null) {
          propertyMap = builder.construct(ctxt, defaultType);
       } else if (feature instanceof EReference) {
-         propertyMap = builder.construct(ctxt, ((EReference) feature).getEReferenceType());
+         final EObject parent = EMFContext.getParent(ctxt);
+         final EClass resolvedType;
+         if (parent == null) {
+            resolvedType = ((EReference) feature).getEReferenceType();
+         } else {
+            resolvedType = (EClass) EcoreUtil.getReifiedType(parent.eClass(), feature.getEGenericType()).getERawType();
+         }
+
+         propertyMap = builder.construct(ctxt, resolvedType);
       } else {
          propertyMap = builder.constructDefault(ctxt);
       }
@@ -205,9 +214,10 @@ public class EObjectDeserializer extends JsonDeserializer<EObject> {
             type = EMFContext.getRoot(ctxt);
          }
       } else {
-         EReference reference = (EReference) getFeature(ctxt);
+         final EReference reference = (EReference) getFeature(ctxt);
          if (reference != null && !reference.getEReferenceType().isAbstract()) {
-            type = reference.getEReferenceType();
+            final EGenericType reifiedType = EcoreUtil.getReifiedType(parent.eClass(), reference.getEGenericType());
+            return (EClass) reifiedType.getERawType();
          }
       }
       return type;

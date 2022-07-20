@@ -124,8 +124,7 @@ public class GenericTest {
    public void testLoadObjectGeneric() throws JsonProcessingException {
       JsonNode data = mapper.createObjectNode()
          .put("eClass", "http://www.emfjson.org/jackson/generics#//BaseOne")
-         .set("containsOne", mapper.createObjectNode()
-            .put("eClass", "http://www.emfjson.org/jackson/generics#//Any"));
+         .set("containsOne", mapper.createObjectNode());
 
       EObject object = mapper
          .reader()
