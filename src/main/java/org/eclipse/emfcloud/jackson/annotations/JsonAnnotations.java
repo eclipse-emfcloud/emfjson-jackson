@@ -75,13 +75,25 @@ public final class JsonAnnotations {
     * @param classifier any classifier
     * @return the type information property
     */
-   @SuppressWarnings("checkstyle:cyclomaticComplexity")
    public static EcoreTypeInfo getTypeProperty(final EClassifier classifier) {
+      return getTypeProperty(classifier, null, null);
+   }
+
+
+   /**
+    * Returns the property that should be use to store the type information of the classifier.
+    *
+    * @param classifier  any classifier
+    * @param valueReader the reader to use for deserializing type info
+    * @param valueWriter the reader to use for serializing type info
+    * @return the type information property
+    */
+   @SuppressWarnings("checkstyle:cyclomaticComplexity")
+   public static EcoreTypeInfo getTypeProperty(final EClassifier classifier,
+                                               ValueReader<String, EClass> valueReader,
+                                               ValueWriter<EClass, String> valueWriter) {
       String property = getValue(classifier, "JsonType", "property");
       String use = getValue(classifier, "JsonType", "use");
-
-      ValueReader<String, EClass> valueReader = EcoreTypeInfo.DEFAULT_VALUE_READER;
-      ValueWriter<EClass, String> valueWriter = EcoreTypeInfo.DEFAULT_VALUE_WRITER;
 
       if (use != null) {
          EcoreTypeInfo.USE useType = EcoreTypeInfo.USE.valueOf(use.toUpperCase());
@@ -106,9 +118,6 @@ public final class JsonAnnotations {
                return type;
             };
             valueWriter = (value, context) -> value.getInstanceClassName();
-         } else {
-            valueReader = EcoreTypeInfo.DEFAULT_VALUE_READER;
-            valueWriter = EcoreTypeInfo.DEFAULT_VALUE_WRITER;
          }
       }
 

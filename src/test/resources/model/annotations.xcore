@@ -66,6 +66,11 @@ class TestF {
 	String otherValue
 }
 
+@JsonType(property="@type")
+class TestG {
+    String value
+}
+
 class Container {
 	contains TestTypeName[] typedByNames
 	contains TestTypeClass[] typedByClasses
