@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019-2021 Guillaume Hillairet and others.
+ * Copyright (c) 2019-2022 Guillaume Hillairet and others.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -12,6 +12,7 @@
 package org.eclipse.emfcloud.jackson.databind.property;
 
 import static org.eclipse.emfcloud.jackson.annotations.JsonAnnotations.getElementName;
+import static org.eclipse.emfcloud.jackson.annotations.JsonAnnotations.isRawValue;
 import static org.eclipse.emfcloud.jackson.module.EMFModule.Feature.OPTION_SERIALIZE_DEFAULT_VALUE;
 
 import java.io.IOException;
@@ -22,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emfcloud.jackson.databind.EMFContext;
+import org.eclipse.emfcloud.jackson.databind.deser.RawDeserializer;
 import org.eclipse.emfcloud.jackson.databind.deser.ReferenceEntries;
 import org.eclipse.emfcloud.jackson.databind.deser.ReferenceEntry;
 import org.eclipse.emfcloud.jackson.databind.type.FeatureKind;
@@ -35,6 +37,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.impl.UnknownSerializer;
+import com.fasterxml.jackson.databind.ser.std.RawSerializer;
 
 public class EObjectFeatureProperty extends EObjectProperty {
 
@@ -43,6 +46,7 @@ public class EObjectFeatureProperty extends EObjectProperty {
    private final boolean defaultValues;
 
    private JsonSerializer<Object> serializer;
+   private JsonDeserializer<Object> deserializer;
 
    public EObjectFeatureProperty(final EStructuralFeature feature, final JavaType type, final int features) {
       super(getElementName(feature));
@@ -50,6 +54,11 @@ public class EObjectFeatureProperty extends EObjectProperty {
       this.feature = feature;
       this.javaType = type;
       this.defaultValues = OPTION_SERIALIZE_DEFAULT_VALUE.enabledIn(features);
+
+      if (isRawValue(feature)) {
+         this.serializer = new RawSerializer<>(String.class);
+         this.deserializer = new RawDeserializer();
+      }
    }
 
    @Override
@@ -57,7 +66,9 @@ public class EObjectFeatureProperty extends EObjectProperty {
    public void deserializeAndSet(final JsonParser jp, final EObject current, final DeserializationContext ctxt,
       final Resource resource)
       throws IOException {
-      final JsonDeserializer<Object> deserializer = ctxt.findContextualValueDeserializer(javaType, null);
+      if (deserializer == null) {
+         deserializer = ctxt.findContextualValueDeserializer(javaType, null);
+      }
       JsonToken token = null;
 
       if (jp.getCurrentToken() == JsonToken.FIELD_NAME) {
