@@ -90,12 +90,7 @@ public class EMFModule extends SimpleModule {
        * Option used to indicate the module to serialize default attributes values.
        * Default values are not serialized by default.
        */
-      OPTION_SERIALIZE_DEFAULT_VALUE(false),
-
-      /**
-       * Option used to indicate the module to serialize containments as references.
-       */
-      OPTION_SERIALIZE_CONTAINMENT_AS_HREF(false);
+      OPTION_SERIALIZE_DEFAULT_VALUE(false);
 
       private final boolean defaultState;
       private final int mask;
