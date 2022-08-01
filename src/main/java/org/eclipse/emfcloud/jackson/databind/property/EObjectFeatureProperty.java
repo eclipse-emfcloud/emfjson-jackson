@@ -17,7 +17,6 @@ import static org.eclipse.emfcloud.jackson.module.EMFModule.Feature.OPTION_SERIA
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -29,6 +28,7 @@ import org.eclipse.emfcloud.jackson.databind.deser.ReferenceEntry;
 import org.eclipse.emfcloud.jackson.databind.type.FeatureKind;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -83,6 +83,7 @@ public class EObjectFeatureProperty extends EObjectProperty {
       switch (FeatureKind.get(feature)) {
          case MAP:
             isMap = true;
+            //$FALL-THROUGH$
          case MANY_CONTAINMENT:
          case SINGLE_CONTAINMENT: {
             EMFContext.setFeature(ctxt, feature);
