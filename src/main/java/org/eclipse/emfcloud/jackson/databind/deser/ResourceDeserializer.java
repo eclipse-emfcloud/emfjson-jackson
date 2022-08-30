@@ -68,6 +68,7 @@ public class ResourceDeserializer extends JsonDeserializer<Resource> {
             if (value != null) {
                resource.getContents().add(value);
             }
+            EMFContext.setParent(ctxt, null);
          }
 
       } else if (jp.getCurrentToken() == JsonToken.START_OBJECT) {

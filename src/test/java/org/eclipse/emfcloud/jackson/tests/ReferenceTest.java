@@ -22,13 +22,15 @@ import static org.junit.Assert.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emfcloud.jackson.databind.EMFContext;
 import org.eclipse.emfcloud.jackson.junit.model.ModelFactory;
 import org.eclipse.emfcloud.jackson.junit.model.ModelPackage;
 import org.eclipse.emfcloud.jackson.junit.model.PrimaryObject;
@@ -39,6 +41,7 @@ import org.eclipse.emfcloud.jackson.support.StandardFixture;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -352,6 +355,50 @@ public class ReferenceTest {
    }
 
    @Test
+   public void testLoadArrayInArrayWithRootElement() throws IOException {
+      Resource resource = resourceSet
+         .createResource(URI.createURI("src/test/resources/tests/array-containing-array-without-eclass.json"));
+      Map<Object, Object> loadOption = new HashMap<>();
+      loadOption.put(EMFContext.Attributes.ROOT_ELEMENT, ModelPackage.Literals.PRIMARY_OBJECT);
+      resource.load(loadOption);
+
+      assertThat(resource.getContents())
+         .hasSize(3)
+         .hasOnlyElementsOfType(PrimaryObject.class);
+
+      PrimaryObject p1 = (PrimaryObject) resource.getContents().get(0);
+      assertThat(p1.getName())
+         .isEqualTo("p1");
+      assertThat(p1.getMultipleContainmentReferenceNoProxies())
+         .hasSize(2);
+      assertThat(p1.getMultipleContainmentReferenceNoProxies().get(0).getSingleAttribute())
+         .isEqualTo("t1");
+      assertThat(p1.getMultipleContainmentReferenceNoProxies().get(1).getSingleAttribute())
+         .isEqualTo("t2");
+
+      PrimaryObject p2 = (PrimaryObject) resource.getContents().get(1);
+      assertThat(p2.getName())
+         .isEqualTo("p2");
+      assertThat(p2.getMultipleContainmentReferenceNoProxies())
+         .hasSize(2);
+      assertThat(p2.getMultipleContainmentReferenceNoProxies().get(0).getSingleAttribute())
+         .isEqualTo("t3");
+      assertThat(p2.getMultipleContainmentReferenceNoProxies().get(1).getSingleAttribute())
+         .isEqualTo("t4");
+
+      PrimaryObject p3 = (PrimaryObject) resource.getContents().get(2);
+      assertThat(p3.getName())
+         .isEqualTo("p3");
+
+      assertThat(p3.getMultipleContainmentReferenceNoProxies())
+         .hasSize(2);
+      assertThat(p3.getMultipleContainmentReferenceNoProxies().get(0).getSingleAttribute())
+         .isEqualTo("t5");
+      assertThat(p3.getMultipleContainmentReferenceNoProxies().get(1).getSingleAttribute())
+         .isEqualTo("t6");
+   }
+
+   @Test
    public void testLoadArrayInsteadOfObject() throws IOException {
       final Resource resource = resourceSet.getResource(
          URI.createURI("src/test/resources/tests/array-instead-of-object.json"), true);
@@ -365,7 +412,7 @@ public class ReferenceTest {
    public void testLoadObjectInsteadOfArray() {
       try {
          resourceSet.getResource(
-             URI.createURI("src/test/resources/tests/object-instead-of-array.json"), true);
+            URI.createURI("src/test/resources/tests/object-instead-of-array.json"), true);
       } catch (final WrappedException e) {
          final Throwable cause = e.getCause();
          assertThat(cause).isInstanceOf(JsonParseException.class);
