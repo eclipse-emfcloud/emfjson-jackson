@@ -1,0 +1,35 @@
+[
+	{
+		"name": "p1",
+		"multipleContainmentReferenceNoProxies": [
+			{
+				"singleAttribute": "t1"
+			},
+			{
+				"singleAttribute": "t2"
+			}
+		]
+	},
+	{
+		"name": "p2",
+		"multipleContainmentReferenceNoProxies": [
+			{
+				"singleAttribute": "t3"
+			},
+			{
+				"singleAttribute": "t4"
+			}
+		]
+	},
+	{
+		"name": "p3",
+		"multipleContainmentReferenceNoProxies": [
+			{
+				"singleAttribute": "t5"
+			},
+			{
+				"singleAttribute": "t6"
+			}
+		]
+	}
+]
