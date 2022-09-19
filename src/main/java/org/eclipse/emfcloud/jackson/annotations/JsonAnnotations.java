@@ -12,6 +12,7 @@ package org.eclipse.emfcloud.jackson.annotations;
 
 import static org.eclipse.emfcloud.jackson.annotations.EcoreTypeInfo.USE.CLASS;
 import static org.eclipse.emfcloud.jackson.annotations.EcoreTypeInfo.USE.NAME;
+import static org.eclipse.emfcloud.jackson.module.EMFModule.Feature.OPTION_USE_NAMES_FROM_EXTENDED_META_DATA;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,11 +40,12 @@ public final class JsonAnnotations {
     * Returns the name that should be use to serialize the property.
     *
     * @param element any element
+    * @param features the EMF module's feature flags
     * @return name of property
     */
-   public static String getElementName(final ENamedElement element) {
+   public static String getElementName(final ENamedElement element, final int features) {
       String value = getValue(element, "JsonProperty", "value");
-      if (value == null) {
+      if (value == null && OPTION_USE_NAMES_FROM_EXTENDED_META_DATA.enabledIn(features)) {
          value = getValue(element, EXTENDED_METADATA, "name");
       }
 

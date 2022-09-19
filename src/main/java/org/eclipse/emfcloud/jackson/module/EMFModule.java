@@ -90,7 +90,14 @@ public class EMFModule extends SimpleModule {
        * Option used to indicate the module to serialize default attributes values.
        * Default values are not serialized by default.
        */
-      OPTION_SERIALIZE_DEFAULT_VALUE(false);
+      OPTION_SERIALIZE_DEFAULT_VALUE(false),
+
+      /**
+       * Option used to indicate whether feature names specified in
+       * {@link org.eclipse.emf.ecore.util.ExtendedMetaData} annotations should
+       * be respected.
+       */
+      OPTION_USE_NAMES_FROM_EXTENDED_META_DATA(true);
 
       private final boolean defaultState;
       private final int mask;
