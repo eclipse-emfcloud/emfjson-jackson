@@ -191,3 +191,17 @@ abstract class AbstractNode {
 class PhysicalNode extends AbstractNode {}
 
 class VirtualNode extends AbstractNode {}
+
+class Book {
+    contains Author author
+
+    @ExtendedMetaData(name="author")
+    String authorName
+
+    String title
+}
+
+class Author {
+    String firstName
+    String lastName
+}
