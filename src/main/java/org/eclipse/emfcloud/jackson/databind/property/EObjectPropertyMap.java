@@ -18,6 +18,7 @@ import static org.eclipse.emfcloud.jackson.annotations.JsonAnnotations.getAliase
 import static org.eclipse.emfcloud.jackson.annotations.JsonAnnotations.getElementName;
 import static org.eclipse.emfcloud.jackson.module.EMFModule.Feature.OPTION_USE_ID;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -56,7 +57,7 @@ public final class EObjectPropertyMap {
 
    public static class Builder {
 
-      private final Map<EClass, EObjectPropertyMap> cache = new WeakHashMap<>();
+      private final Map<EClass, EObjectPropertyMap> cache = Collections.synchronizedMap(new WeakHashMap<>());
 
       private final EcoreIdentityInfo identityInfo;
       private final EcoreTypeInfo typeInfo;
