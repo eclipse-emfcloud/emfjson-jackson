@@ -16,6 +16,7 @@ import static org.eclipse.emf.ecore.EcorePackage.Literals.EJAVA_CLASS;
 import static org.eclipse.emf.ecore.EcorePackage.Literals.EJAVA_OBJECT;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.WeakHashMap;
@@ -34,7 +35,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 public class EcoreTypeFactory {
 
-   private final Map<Pair<EClass, EStructuralFeature>, JavaType> cache = new WeakHashMap<>();
+   private final Map<Pair<EClass, EStructuralFeature>, JavaType> cache = Collections.synchronizedMap(new WeakHashMap<>());
 
    private static class Pair<A, B> {
       private final A a;
