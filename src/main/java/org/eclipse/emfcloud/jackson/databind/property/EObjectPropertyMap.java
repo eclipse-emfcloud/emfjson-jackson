@@ -137,7 +137,7 @@ public final class EObjectPropertyMap {
                EAnnotation annotation = operation.getEAnnotation("JsonProperty");
 
                if (annotation != null && operation.getEParameters().isEmpty()) {
-                  add.accept(new EObjectOperationProperty(getElementName(operation), operation));
+                  add.accept(new EObjectOperationProperty(getElementName(operation, features), operation));
                }
             }
          }

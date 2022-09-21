@@ -49,7 +49,7 @@ public class EObjectFeatureProperty extends EObjectProperty {
    private JsonDeserializer<Object> deserializer;
 
    public EObjectFeatureProperty(final EStructuralFeature feature, final JavaType type, final int features) {
-      super(getElementName(feature));
+      super(getElementName(feature, features));
 
       this.feature = feature;
       this.javaType = type;
