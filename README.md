@@ -1,4 +1,4 @@
-# EMF.cloud: EMF JSON-Jackson
+# Eclipse EMF.cloud EMF JSON-Jackson
 
 [![build-status](https://img.shields.io/jenkins/build?jobUrl=https://ci.eclipse.org/emfcloud/job/eclipse-emfcloud/job/emfjson-jackson/job/master/&label=master-build)](https://ci.eclipse.org/emfcloud/job/eclipse-emfcloud/job/emfjson-jackson/job/master/)
 [![p2-deploy-status](https://img.shields.io/jenkins/build?jobUrl=https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-p2&label=p2-publish)](https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-p2/)
