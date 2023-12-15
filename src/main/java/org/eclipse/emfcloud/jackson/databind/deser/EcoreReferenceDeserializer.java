@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emfcloud.jackson.annotations.EcoreReferenceInfo;
 import org.eclipse.emfcloud.jackson.annotations.EcoreTypeInfo;
 import org.eclipse.emfcloud.jackson.databind.EMFContext;
+import org.eclipse.emfcloud.jackson.utils.EObjects;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -50,8 +51,11 @@ public class EcoreReferenceDeserializer extends JsonDeserializer<ReferenceEntry>
             type = jp.nextTextValue();
          }
       }
-
-      return id != null ? new ReferenceEntry.Base(parent, reference, id, type) : null;
+      if (id != null) {
+         return EObjects.isFeatureMapEntry(reference) ? new ReferenceEntry.ForMapEntry(parent, reference, id, type)
+            : new ReferenceEntry.Base(parent, reference, id, type);
+      }
+      return null;
    }
 
 }

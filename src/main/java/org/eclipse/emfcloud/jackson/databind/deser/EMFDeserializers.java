@@ -17,6 +17,8 @@ import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.FeatureMap;
+import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emfcloud.jackson.databind.property.EObjectPropertyMap;
 import org.eclipse.emfcloud.jackson.databind.type.EcoreType;
 import org.eclipse.emfcloud.jackson.module.EMFModule;
@@ -39,6 +41,7 @@ public class EMFDeserializers extends Deserializers.Base {
    private final JsonDeserializer<EList<Map.Entry<?, ?>>> mapDeserializer;
    private final JsonDeserializer<Object> dataTypeDeserializer;
    private final JsonDeserializer<ReferenceEntry> referenceDeserializer;
+   private final JsonDeserializer<Entry> featureMapEntryDeserializer;
    private final EObjectPropertyMap.Builder builder;
 
    public EMFDeserializers(final EMFModule module) {
@@ -49,6 +52,7 @@ public class EMFDeserializers extends Deserializers.Base {
          module.getFeatures());
       this.resourceDeserializer = new ResourceDeserializer(module.getUriHandler());
       this.referenceDeserializer = module.getReferenceDeserializer();
+      this.featureMapEntryDeserializer = module.getFeatureMapEntryDeserializer();
       this.mapDeserializer = new EMapDeserializer();
       this.dataTypeDeserializer = new EDataTypeDeserializer();
    }
@@ -121,6 +125,10 @@ public class EMFDeserializers extends Deserializers.Base {
 
       if (type.isTypeOrSubTypeOf(EObject.class)) {
          return new EObjectDeserializer(builder, type.getRawClass());
+      }
+
+      if (type.isTypeOrSubTypeOf(FeatureMap.Entry.class)) {
+         return featureMapEntryDeserializer;
       }
 
       return super.findBeanDeserializer(type, config, beanDesc);

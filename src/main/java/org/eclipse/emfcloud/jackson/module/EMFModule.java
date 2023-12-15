@@ -15,14 +15,18 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emfcloud.jackson.annotations.EcoreIdentityInfo;
 import org.eclipse.emfcloud.jackson.annotations.EcoreReferenceInfo;
 import org.eclipse.emfcloud.jackson.annotations.EcoreTypeInfo;
+import org.eclipse.emfcloud.jackson.databind.FeatureMapEntryConfig;
 import org.eclipse.emfcloud.jackson.databind.deser.EMFDeserializers;
 import org.eclipse.emfcloud.jackson.databind.deser.EcoreReferenceDeserializer;
+import org.eclipse.emfcloud.jackson.databind.deser.FeatureMapEntryDeserializer;
 import org.eclipse.emfcloud.jackson.databind.deser.ReferenceEntry;
 import org.eclipse.emfcloud.jackson.databind.ser.EMFSerializers;
 import org.eclipse.emfcloud.jackson.databind.ser.EcoreReferenceSerializer;
+import org.eclipse.emfcloud.jackson.databind.ser.FeatureMapEntrySerializer;
 import org.eclipse.emfcloud.jackson.databind.ser.NullKeySerializer;
 import org.eclipse.emfcloud.jackson.handlers.BaseURIHandler;
 import org.eclipse.emfcloud.jackson.handlers.URIHandler;
@@ -50,6 +54,9 @@ public class EMFModule extends SimpleModule {
    private JsonSerializer<EObject> referenceSerializer;
    private JsonDeserializer<ReferenceEntry> referenceDeserializer;
 
+   private JsonSerializer<FeatureMap.Entry> featureMapEntrySerializer;
+   private JsonDeserializer<FeatureMap.Entry> featureMapEntryDeserializer;
+
    public void setTypeInfo(final EcoreTypeInfo info) { this.typeInfo = info; }
 
    public void setIdentityInfo(final EcoreIdentityInfo identityInfo) { this.identityInfo = identityInfo; }
@@ -67,6 +74,18 @@ public class EMFModule extends SimpleModule {
    }
 
    public JsonDeserializer<ReferenceEntry> getReferenceDeserializer() { return referenceDeserializer; }
+
+   public void setFeatureMapEntrySerializer(final JsonSerializer<FeatureMap.Entry> serializer) {
+      this.featureMapEntrySerializer = serializer;
+   }
+
+   public JsonSerializer<FeatureMap.Entry> getFeatureMapEntrySerializer() { return featureMapEntrySerializer; }
+
+   public void setFeatureMapEntryDeserializer(final JsonDeserializer<FeatureMap.Entry> deserializer) {
+      this.featureMapEntryDeserializer = deserializer;
+   }
+
+   public JsonDeserializer<FeatureMap.Entry> getFeatureMapEntryDeserializer() { return featureMapEntryDeserializer; }
 
    /**
     * Enumeration that defines all possible options that can be used
@@ -103,7 +122,18 @@ public class EMFModule extends SimpleModule {
        * {@link org.eclipse.emf.ecore.util.ExtendedMetaData} annotations should
        * be respected.
        */
-      OPTION_USE_NAMES_FROM_EXTENDED_META_DATA(true);
+      OPTION_USE_NAMES_FROM_EXTENDED_META_DATA(true),
+
+      /**
+       * Option used to indicate that we want to use dedicated fixed properties to identify the feature name
+       * (<code>FeatureMapEntryConfig.KEY_PROPERTY</code>) and the value
+       * (<code>FeatureMapEntryConfig.VALUE_PROPERTY</code>) in the
+       * {@link org.eclipse.emf.ecore.util.FeatureMap.Entry}.
+       * <p>
+       * By default, we would use the feature name directly as key, for a lighter json-style approach.
+       * </p>
+       */
+      OPTION_USE_FEATURE_MAP_KEY_AND_VALUE_PROPERTIES(false);
 
       private final boolean defaultState;
       private final int mask;
@@ -175,7 +205,12 @@ public class EMFModule extends SimpleModule {
    public EMFModule() {}
 
    @Override
+   @SuppressWarnings({ "checkstyle:cyclomaticComplexity", "checkstyle:npathComplexity" })
    public void setupModule(final SetupContext context) {
+      /*
+       * Initialize every non-assigned field to setup a functional module.
+       * Skip the complexity checks, as splitting would only make it harder to read.
+       */
       if (handler == null) {
          handler = new BaseURIHandler();
       }
@@ -198,6 +233,15 @@ public class EMFModule extends SimpleModule {
 
       if (referenceDeserializer == null) {
          referenceDeserializer = new EcoreReferenceDeserializer(referenceInfo, typeInfo);
+      }
+
+      if (featureMapEntrySerializer == null) {
+         featureMapEntrySerializer = new FeatureMapEntrySerializer(referenceSerializer,
+            new FeatureMapEntryConfig(getFeatures()));
+      }
+
+      if (featureMapEntryDeserializer == null) {
+         featureMapEntryDeserializer = new FeatureMapEntryDeserializer(new FeatureMapEntryConfig(getFeatures()));
       }
 
       EMFDeserializers deserializers = new EMFDeserializers(this);

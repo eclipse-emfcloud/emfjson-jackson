@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emfcloud.jackson.databind.EMFContext;
 import org.eclipse.emfcloud.jackson.databind.deser.RawDeserializer;
 import org.eclipse.emfcloud.jackson.databind.deser.ReferenceEntries;
@@ -94,6 +95,11 @@ public class EObjectFeatureProperty extends EObjectProperty {
          case MANY_ATTRIBUTE: {
             if (feature.getEType() instanceof EDataType) {
                EMFContext.setDataType(ctxt, feature.getEType());
+               Class<?> clazz = feature.getEType().getInstanceClass();
+               if (clazz != null && FeatureMap.Entry.class.isAssignableFrom(clazz)) {
+                  // we need the parent to construct the feature map entry with correct feature
+                  EMFContext.setParent(ctxt, current);
+               }
             }
 
             if (feature.isMany()) {

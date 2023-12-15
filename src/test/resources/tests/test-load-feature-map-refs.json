@@ -3,8 +3,8 @@
   "featureMapReferenceCollection": [
     {
       "featureMapReferenceType1": {
-        "$ref": "//@featureMapReferenceCollection.1/value",
-        "eClass": "http://www.emfjson.org/jackson/model#//TargetObject"
+        "eClass": "http://www.emfjson.org/jackson/model#//TargetObject",
+        "$ref": "//@featureMapReferenceCollection.1/featureMapReferenceType2"
       }
     },
     {
@@ -33,8 +33,8 @@
     },
     {
       "featureMapReferenceType1": {
-        "$ref": "//@featureMapReferenceCollection.2/value",
-        "eClass": "http://www.emfjson.org/jackson/model#//TargetObject"
+        "eClass": "http://www.emfjson.org/jackson/model#//TargetObject",
+        "$ref": "//@featureMapReferenceCollection.2/featureMapReferenceType2"
       }
     }
   ]

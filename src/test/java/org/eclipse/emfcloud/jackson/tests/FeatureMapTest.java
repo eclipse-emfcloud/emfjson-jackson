@@ -22,6 +22,7 @@ import java.util.List;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emfcloud.jackson.junit.featureMapMixed.AType;
 import org.eclipse.emfcloud.jackson.junit.featureMapMixed.BType;
@@ -33,6 +34,8 @@ import org.eclipse.emfcloud.jackson.junit.model.ModelPackage;
 import org.eclipse.emfcloud.jackson.junit.model.PrimaryObject;
 import org.eclipse.emfcloud.jackson.junit.model.TargetObject;
 import org.eclipse.emfcloud.jackson.module.EMFModule;
+import org.eclipse.emfcloud.jackson.resource.JsonResource;
+import org.eclipse.emfcloud.jackson.resource.JsonResourceFactory;
 import org.eclipse.emfcloud.jackson.support.StandardFixture;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -60,6 +63,9 @@ public class FeatureMapTest {
       this.optionUseFeatureMapKeyAndValueProperties = optionUseFeatureMapKeyAndValueProperties;
       mapper = fixture.mapper(EMFModule.Feature.OPTION_USE_FEATURE_MAP_KEY_AND_VALUE_PROPERTIES,
          optionUseFeatureMapKeyAndValueProperties);
+      // update the resource factory with correct mapper
+      fixture.getResourceSet().getResourceFactoryRegistry().getExtensionToFactoryMap().put("*",
+         new JsonResourceFactory(mapper));
    }
 
    @Test
@@ -84,7 +90,7 @@ public class FeatureMapTest {
             .add(mapper.createObjectNode()
                .put("featureMapAttributeType1", "Hello"))
             .add(mapper.createObjectNode()
-               .put("valfeatureMapAttributeType2ue", "World"))
+               .put("featureMapAttributeType2", "World"))
             .add(mapper.createObjectNode()
                .put("featureMapAttributeType1", "!")));
       }
@@ -104,9 +110,8 @@ public class FeatureMapTest {
       assertEquals(1, primaryObject.getFeatureMapAttributeType2().size());
 
       Resource resource = resourceSet.createResource(URI.createURI("test.json"));
+      ((JsonResource) resource).setObjectMapper(mapper);
       resource.getContents().add(primaryObject);
-
-      System.out.println(mapper.valueToTree(resource));
 
       assertEquals(expected, mapper.valueToTree(resource));
    }
@@ -140,6 +145,8 @@ public class FeatureMapTest {
 
       PrimaryObject p = (PrimaryObject) resource.getContents().get(0);
 
+      EcoreUtil.resolve(p.getFeatureMapReferenceType1().get(0), p);
+
       assertEquals(6, p.getFeatureMapReferenceCollection().size());
       assertEquals(2, p.getFeatureMapReferenceType1().size());
       assertEquals(4, p.getFeatureMapReferenceType2().size());
@@ -154,11 +161,11 @@ public class FeatureMapTest {
 
       TargetObject t3 = p.getFeatureMapReferenceType2().get(2);
       assertEquals("3", t3.getSingleAttribute());
-      assertEquals(t1, p.getFeatureMapReferenceCollection().get(3).getValue());
+      assertEquals(t3, p.getFeatureMapReferenceCollection().get(3).getValue());
 
       TargetObject t4 = p.getFeatureMapReferenceType2().get(3);
       assertEquals("4", t4.getSingleAttribute());
-      assertEquals(t1, p.getFeatureMapReferenceCollection().get(4).getValue());
+      assertEquals(t4, p.getFeatureMapReferenceCollection().get(4).getValue());
 
       assertEquals(t1, p.getFeatureMapReferenceType1().get(0));
       assertEquals(t1, p.getFeatureMapReferenceCollection().get(0).getValue());
@@ -176,6 +183,7 @@ public class FeatureMapTest {
             .add(mapper.createObjectNode()
                .put("featureName", "featureMapReferenceType1")
                .set("value", mapper.createObjectNode()
+                  .put("eClass", "http://www.emfjson.org/jackson/model#//TargetObject")
                   .put("$ref", "//@featureMapReferenceCollection.1/value")))
             .add(mapper.createObjectNode()
                .put("featureName", "featureMapReferenceType2")
@@ -194,13 +202,15 @@ public class FeatureMapTest {
                .set("value", mapper.createObjectNode()
                   .put("singleAttribute", "4")))
             .add(mapper.createObjectNode()
-               .put("featureName", "featureMapReferenceType2")
+               .put("featureName", "featureMapReferenceType1")
                .set("value", mapper.createObjectNode()
+                  .put("eClass", "http://www.emfjson.org/jackson/model#//TargetObject")
                   .put("$ref", "//@featureMapReferenceCollection.2/value"))));
       } else {
          expected.set("featureMapReferenceCollection", mapper.createArrayNode()
             .add(mapper.createObjectNode()
                .set("featureMapReferenceType1", mapper.createObjectNode()
+                  .put("eClass", "http://www.emfjson.org/jackson/model#//TargetObject")
                   .put("$ref", "//@featureMapReferenceCollection.1/featureMapReferenceType2")))
             .add(mapper.createObjectNode()
                .set("featureMapReferenceType2", mapper.createObjectNode()
@@ -215,11 +225,13 @@ public class FeatureMapTest {
                .set("featureMapReferenceType2", mapper.createObjectNode()
                   .put("singleAttribute", "4")))
             .add(mapper.createObjectNode()
-               .set("featureMapReferenceType2", mapper.createObjectNode()
+               .set("featureMapReferenceType1", mapper.createObjectNode()
+                  .put("eClass", "http://www.emfjson.org/jackson/model#//TargetObject")
                   .put("$ref", "//@featureMapReferenceCollection.2/featureMapReferenceType2"))));
       }
 
       Resource resource = resourceSet.createResource(URI.createURI("tests.json"));
+      ((JsonResource) resource).setObjectMapper(mapper);
       assertNotNull(resource);
 
       PrimaryObject p = ModelFactory.eINSTANCE.createPrimaryObject();
@@ -252,7 +264,7 @@ public class FeatureMapTest {
          .put("eClass", "http://www.emfjson.org/jackson/featureMapMixed#//DocumentRoot");
 
       if (optionUseFeatureMapKeyAndValueProperties) {
-         expected.set("mixed", mapper.createArrayNode()
+         expected.set(":mixed", mapper.createArrayNode()
             .add(mapper.createObjectNode()
                .put("featureName", "B")
                .set("value", mapper.createObjectNode()
@@ -262,7 +274,7 @@ public class FeatureMapTest {
                .set("value", mapper.createObjectNode()
                   .put("attributeA", "valueA"))));
       } else {
-         expected.set("mixed", mapper.createArrayNode()
+         expected.set(":mixed", mapper.createArrayNode()
             .add(mapper.createObjectNode()
                .set("B", mapper.createObjectNode()
                   .put("attributeB", "valueB")))
@@ -286,9 +298,8 @@ public class FeatureMapTest {
       assertNotNull(root.getBElements());
 
       Resource resource = resourceSet.createResource(URI.createURI("test.json"));
+      ((JsonResource) resource).setObjectMapper(mapper);
       resource.getContents().add(root);
-
-      System.out.println(mapper.valueToTree(resource));
 
       assertEquals(expected, mapper.valueToTree(resource));
    }
