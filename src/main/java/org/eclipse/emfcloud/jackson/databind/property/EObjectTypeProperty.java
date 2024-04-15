@@ -11,6 +11,7 @@
 
 package org.eclipse.emfcloud.jackson.databind.property;
 
+import static org.eclipse.emfcloud.jackson.module.EMFModule.Feature.OPTION_MINIMIZE_TYPE_INFO;
 import static org.eclipse.emfcloud.jackson.module.EMFModule.Feature.OPTION_SERIALIZE_TYPE;
 
 import java.io.IOException;
@@ -57,19 +58,23 @@ public class EObjectTypeProperty extends EObjectProperty {
    @Override
    public void serialize(final EObject bean, final JsonGenerator jg, final SerializerProvider provider)
       throws IOException {
-      if (!OPTION_SERIALIZE_TYPE.enabledIn(features)) {
-         return;
-      }
-
-      EClass objectType = bean.eClass();
-      EReference containment = bean.eContainmentFeature();
-
-      if (isRoot(bean) || shouldSaveType(objectType, containment.getEReferenceType(), containment)) {
+      if (shouldWriteType(bean)) {
          String value = valueWriter.writeValue(bean.eClass(), provider);
-
          jg.writeFieldName(getFieldName());
          serializer.serialize(value, jg, provider);
       }
+   }
+
+   private boolean shouldWriteType(final EObject bean) {
+      if (!OPTION_SERIALIZE_TYPE.enabledIn(features)) {
+         return false;
+      }
+      if (!OPTION_MINIMIZE_TYPE_INFO.enabledIn(features)) {
+         return true;
+      }
+      EClass objectType = bean.eClass();
+      EReference containment = bean.eContainmentFeature();
+      return isRoot(bean) || shouldSaveType(objectType, containment.getEReferenceType(), containment);
    }
 
    private boolean isRoot(final EObject bean) {

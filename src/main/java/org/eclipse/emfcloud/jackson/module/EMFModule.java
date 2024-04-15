@@ -87,6 +87,12 @@ public class EMFModule extends SimpleModule {
       OPTION_SERIALIZE_TYPE(true),
 
       /**
+       * Option used to indicate the module to minimize the type information during
+       * serialization, i.e., skip type information that may not be necessary.
+       */
+      OPTION_MINIMIZE_TYPE_INFO(true),
+
+      /**
        * Option used to indicate the module to serialize default attributes values.
        * Default values are not serialized by default.
        */
