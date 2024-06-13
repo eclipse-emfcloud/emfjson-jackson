@@ -31,6 +31,7 @@ import org.eclipse.emfcloud.jackson.databind.type.FeatureKind;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
@@ -102,19 +103,7 @@ public class EObjectFeatureProperty extends EObjectProperty {
                }
             }
 
-            if (feature.isMany()) {
-               if (token != JsonToken.START_ARRAY && !isMap) {
-                  throw new JsonParseException(jp, "Expected START_ARRAY token, got " + token);
-               }
-
-               deserializer.deserialize(jp, ctxt, current.eGet(feature));
-            } else {
-               Object value = deserializer.deserialize(jp, ctxt);
-
-               if (value != null) {
-                  current.eSet(feature, value);
-               }
-            }
+            deserializeValue(jp, current, ctxt, token, isMap);
          }
             break;
          case MANY_REFERENCE:
@@ -122,19 +111,41 @@ public class EObjectFeatureProperty extends EObjectProperty {
             EMFContext.setFeature(ctxt, feature);
             EMFContext.setParent(ctxt, current);
 
-            ReferenceEntries entries = EMFContext.getEntries(ctxt);
-            if (feature.isMany()) {
-               deserializer.deserialize(jp, ctxt, entries.entries());
-            } else {
-               Object value = deserializer.deserialize(jp, ctxt);
-               if (entries != null && value instanceof ReferenceEntry) {
-                  entries.entries().add((ReferenceEntry) value);
-               }
-            }
+            deserializeAsReference(jp, ctxt);
          }
             break;
          default:
             break;
+      }
+   }
+
+   public void deserializeAsReference(final JsonParser jp, final DeserializationContext ctxt)
+      throws IOException, JsonProcessingException {
+      ReferenceEntries entries = EMFContext.getEntries(ctxt);
+      if (feature.isMany()) {
+         deserializer.deserialize(jp, ctxt, entries.entries());
+      } else {
+         Object value = deserializer.deserialize(jp, ctxt);
+         if (entries != null && value instanceof ReferenceEntry) {
+            entries.entries().add((ReferenceEntry) value);
+         }
+      }
+   }
+
+   public void deserializeValue(final JsonParser jp, final EObject current, final DeserializationContext ctxt,
+      final JsonToken token, final boolean isMap) throws JsonParseException, IOException, JsonProcessingException {
+      if (feature.isMany()) {
+         if (token != JsonToken.START_ARRAY && !isMap) {
+            throw new JsonParseException(jp, "Expected START_ARRAY token, got " + token);
+         }
+
+         deserializer.deserialize(jp, ctxt, current.eGet(feature));
+      } else {
+         Object value = deserializer.deserialize(jp, ctxt);
+
+         if (value != null) {
+            current.eSet(feature, value);
+         }
       }
    }
 
