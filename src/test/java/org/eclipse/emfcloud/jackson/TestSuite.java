@@ -23,6 +23,7 @@ import org.eclipse.emfcloud.jackson.tests.ModelTest;
 import org.eclipse.emfcloud.jackson.tests.ModuleTest;
 import org.eclipse.emfcloud.jackson.tests.NoMinimizedTypeTest;
 import org.eclipse.emfcloud.jackson.tests.NoTypeTest;
+import org.eclipse.emfcloud.jackson.tests.NorasCaravanTest;
 import org.eclipse.emfcloud.jackson.tests.PolymorphicTest;
 import org.eclipse.emfcloud.jackson.tests.ReaderTest;
 import org.eclipse.emfcloud.jackson.tests.ReferenceTest;
@@ -70,6 +71,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
    // meta
    ModelTest.class,
+   NorasCaravanTest.class,
 
    // annotations
    JsonPropertyTest.class,

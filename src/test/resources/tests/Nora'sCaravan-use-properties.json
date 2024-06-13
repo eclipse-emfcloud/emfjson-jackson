@@ -1,0 +1,36 @@
+{
+  "eClass": "http://www.emfjson.org/jackson/caravan#//DocumentRoot",
+  ":mixed": [
+    {
+      "featureName":"Caravan",
+      "value": {
+        "group:0": [
+         {
+           "featureName":"Person",
+           "value" : {
+             "firstName":"Nora"
+           }
+         },
+         {
+           "featureName":"DromaderyCamel",
+           "value" : {
+             "name":"Grumpy"
+           }
+         },
+         {
+           "featureName":"BactrianCamel",
+           "value" : {
+             "name":"Humpy"
+           }
+         },
+         {
+           "featureName":"DromaderyCamel",
+           "value" : {
+             "name":"Happy"
+           }
+         }
+        ]
+       }
+    }
+  ]
+ }
