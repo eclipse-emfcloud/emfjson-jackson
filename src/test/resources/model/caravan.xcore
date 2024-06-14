@@ -44,13 +44,13 @@ class CaravanType {
 @ExtendedMetaData(name="Person", kind="empty")
 class Person {
     @ExtendedMetaData(kind="attribute", name="firstName")
-    org.eclipse.emf.ecore.xml.^type.String[1] firstName
+    String firstName
 }
 
 @ExtendedMetaData(name="Camel", kind="empty")
 abstract class Camel {
     @ExtendedMetaData(kind="attribute", name="name")
-    org.eclipse.emf.ecore.xml.^type.String[1] name
+    String name
 }
 
 @GenModel(documentation="A camel with two humps.")

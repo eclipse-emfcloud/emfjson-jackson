@@ -20,6 +20,8 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -31,6 +33,8 @@ import org.eclipse.emfcloud.jackson.module.EMFModule;
 import org.eclipse.emfcloud.jackson.resource.JsonResource;
 import org.eclipse.emfcloud.jackson.resource.JsonResourceFactory;
 import org.eclipse.emfcloud.jackson.support.StandardFixture;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,6 +60,19 @@ public class NorasCaravanTest {
    private final ObjectMapper mapper;
    private final Boolean optionUseFeatureMapKeyAndValueProperties;
 
+   @Before
+   public void setUp() {
+      // make sure Caravan package is loaded so that EMF does not try to get it from http
+      EPackage.Registry.INSTANCE.put(EcorePackage.eNS_URI, EcorePackage.eINSTANCE);
+      EPackage.Registry.INSTANCE.put(CaravanPackage.eNS_URI, CaravanPackage.eINSTANCE);
+   }
+
+   @After
+   public void tearDown() {
+      EPackage.Registry.INSTANCE.clear();
+      Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().clear();
+   }
+
    public NorasCaravanTest(final Boolean optionUseFeatureMapKeyAndValueProperties) {
       this.optionUseFeatureMapKeyAndValueProperties = optionUseFeatureMapKeyAndValueProperties;
       mapper = fixture.mapper(EMFModule.Feature.OPTION_USE_FEATURE_MAP_KEY_AND_VALUE_PROPERTIES,
@@ -63,8 +80,6 @@ public class NorasCaravanTest {
       // update the resource factory with correct mapper
       fixture.getResourceSet().getResourceFactoryRegistry().getExtensionToFactoryMap().put("*",
          new JsonResourceFactory(mapper));
-      // make sure Caravan package is loaded so that EMF does not try to get it from http
-      CaravanPackage.eINSTANCE.getNsURI();
    }
 
    @Test
