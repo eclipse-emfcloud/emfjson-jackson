@@ -119,7 +119,7 @@ public class EObjectFeatureProperty extends EObjectProperty {
       }
    }
 
-   public void deserializeAsReference(final JsonParser jp, final DeserializationContext ctxt)
+   protected void deserializeAsReference(final JsonParser jp, final DeserializationContext ctxt)
       throws IOException, JsonProcessingException {
       ReferenceEntries entries = EMFContext.getEntries(ctxt);
       if (feature.isMany()) {
@@ -132,7 +132,7 @@ public class EObjectFeatureProperty extends EObjectProperty {
       }
    }
 
-   public void deserializeValue(final JsonParser jp, final EObject current, final DeserializationContext ctxt,
+   protected void deserializeValue(final JsonParser jp, final EObject current, final DeserializationContext ctxt,
       final JsonToken token, final boolean isMap) throws JsonParseException, IOException, JsonProcessingException {
       if (feature.isMany()) {
          if (token != JsonToken.START_ARRAY && !isMap) {
