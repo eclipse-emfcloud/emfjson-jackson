@@ -1,0 +1,64 @@
+@Ecore(nsURI="http://www.emfjson.org/jackson/caravan")
+@GenModel(
+    modelDirectory="emfjson-jackson/src/test/java-gen",
+    updateClasspath="false",
+    bundleManifest="false",
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl",
+    complianceLevel="8.0",
+    documentation="A functional sample metamodel to illustrate the use of FeatureMapEntry with Json."
+)
+package org.eclipse.emfcloud.jackson.junit.caravan
+
+import org.eclipse.emf.ecore.EFeatureMapEntry
+import org.eclipse.emf.ecore.EStringToStringMapEntry
+
+@ExtendedMetaData(name="", kind="mixed")
+class DocumentRoot {
+    @ExtendedMetaData(kind="elementWildcard", name=":mixed")
+    EFeatureMapEntry[] mixed
+    @ExtendedMetaData(kind="attribute", name="xmlns:prefix")
+    contains transient EStringToStringMapEntry[] xMLNSPrefixMap
+    @ExtendedMetaData(kind="attribute", name="xsi:schemaLocation")
+    contains transient EStringToStringMapEntry[] xSISchemaLocation
+    @ExtendedMetaData(kind="element", name="Caravan", namespace="##targetNamespace")
+    contains transient volatile derived CaravanType[0..?] caravan
+    @ExtendedMetaData(kind="element", name="LonePerson", namespace="##targetNamespace")
+    contains transient volatile derived Person[0..?] lonePerson
+}
+
+@ExtendedMetaData(name="Caravan_._type", kind="elementOnly")
+class CaravanType {
+    @ExtendedMetaData(kind="group", name="group:0")
+    EFeatureMapEntry[] group
+    @GenModel(documentation="A human person composing the caravan.")
+    @ExtendedMetaData(kind="element", name="Person", namespace="##targetNamespace", group="#group:0")
+    contains transient volatile derived Person[] person
+    @GenModel(documentation="A dromadery camel composing the caravan.")
+    @ExtendedMetaData(kind="element", name="DromaderyCamel", namespace="##targetNamespace", group="#group:0")
+    contains transient volatile derived DromaderyCamel[] dromaderyCamel
+    @GenModel(documentation="A bactrian camel composing the caravan.")
+    @ExtendedMetaData(kind="element", name="BactrianCamel", namespace="##targetNamespace", group="#group:0")
+    contains transient volatile derived BactrianCamel[] bactrianCamel
+}
+
+@ExtendedMetaData(name="Person", kind="empty")
+class Person {
+    @ExtendedMetaData(kind="attribute", name="firstName")
+    String firstName
+}
+
+@ExtendedMetaData(name="Camel", kind="empty")
+abstract class Camel {
+    @ExtendedMetaData(kind="attribute", name="name")
+    String name
+}
+
+@GenModel(documentation="A camel with two humps.")
+@ExtendedMetaData(name="BactrianCamel", kind="empty")
+class BactrianCamel extends Camel {
+}
+
+@GenModel(documentation="A camel with only one hump.")
+@ExtendedMetaData(name="DromaderyCamel", kind="empty")
+class DromaderyCamel extends Camel {
+}

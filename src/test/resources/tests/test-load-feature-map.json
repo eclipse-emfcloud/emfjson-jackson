@@ -1,6 +1,15 @@
 {
   "eClass": "http://www.emfjson.org/jackson/model#//PrimaryObject",
   "name": "junit",
-  "featureMapAttributeType1": [ "Hello" ],
-  "featureMapAttributeType2": [ "World" ]
+  "featureMapAttributeCollection": [
+    {
+      "featureMapAttributeType1": "Hello"
+    },
+    {
+      "featureMapAttributeType2": "World"
+    },
+    {
+      "featureMapAttributeType1": "!"
+    }
+  ]
 }

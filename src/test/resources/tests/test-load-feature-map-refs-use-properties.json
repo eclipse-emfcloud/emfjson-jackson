@@ -2,39 +2,45 @@
   "eClass": "http://www.emfjson.org/jackson/model#//PrimaryObject",
   "featureMapReferenceCollection": [
     {
-      "featureMapReferenceType1": {
+      "featureName": "featureMapReferenceType1",
+      "value": {
         "eClass": "http://www.emfjson.org/jackson/model#//TargetObject",
-        "$ref": "//@featureMapReferenceCollection.1/featureMapReferenceType2"
+        "$ref": "//@featureMapReferenceCollection.1/value"
       }
     },
     {
-      "featureMapReferenceType2": {
+      "featureName": "featureMapReferenceType2",
+      "value": {
         "eClass": "http://www.emfjson.org/jackson/model#//TargetObject",
         "singleAttribute": "1"
       }
     },
     {
-      "featureMapReferenceType2": {
+      "featureName": "featureMapReferenceType2",
+      "value": {
         "eClass": "http://www.emfjson.org/jackson/model#//TargetObject",
         "singleAttribute": "2"
       }
     },
     {
-      "featureMapReferenceType2": {
+      "featureName": "featureMapReferenceType2",
+      "value": {
         "eClass": "http://www.emfjson.org/jackson/model#//TargetObject",
         "singleAttribute": "3"
       }
     },
     {
-      "featureMapReferenceType2": {
+      "featureName": "featureMapReferenceType2",
+      "value": {
         "eClass": "http://www.emfjson.org/jackson/model#//TargetObject",
         "singleAttribute": "4"
       }
     },
     {
-      "featureMapReferenceType1": {
+      "featureName": "featureMapReferenceType1",
+      "value": {
         "eClass": "http://www.emfjson.org/jackson/model#//TargetObject",
-        "$ref": "//@featureMapReferenceCollection.2/featureMapReferenceType2"
+        "$ref": "//@featureMapReferenceCollection.2/value"
       }
     }
   ]

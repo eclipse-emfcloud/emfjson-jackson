@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<caravan:Caravan xmlns:caravan="http://www.emfjson.org/jackson/caravan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <caravan:Person firstName="Nora"/>
+  <caravan:DromaderyCamel name="Grumpy"/>
+  <caravan:BactrianCamel name="Humpy"/>
+  <caravan:DromaderyCamel name="Happy"/>
+</caravan:Caravan>

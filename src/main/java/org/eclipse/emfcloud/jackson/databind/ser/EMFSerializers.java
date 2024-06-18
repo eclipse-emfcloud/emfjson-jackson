@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.EEnumLiteralImpl;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emfcloud.jackson.databind.deser.ReferenceEntry;
 import org.eclipse.emfcloud.jackson.databind.property.EObjectPropertyMap;
 import org.eclipse.emfcloud.jackson.databind.type.EcoreType;
@@ -37,6 +38,7 @@ import com.fasterxml.jackson.databind.type.MapLikeType;
 public class EMFSerializers extends Serializers.Base {
 
    private final EObjectPropertyMap.Builder propertiesBuilder;
+   private final JsonSerializer<FeatureMap.Entry> featureMapEntrySerializer;
    private final JsonSerializer<EObject> referenceSerializer;
    private final JsonSerializer<Resource> resourceSerializer = new ResourceSerializer();
    private final JsonSerializer<?> dataTypeSerializer = new EDataTypeSerializer();
@@ -46,6 +48,7 @@ public class EMFSerializers extends Serializers.Base {
 
    public EMFSerializers(final EMFModule module) {
       this.propertiesBuilder = EObjectPropertyMap.Builder.from(module, module.getFeatures());
+      this.featureMapEntrySerializer = module.getFeatureMapEntrySerializer();
       this.referenceSerializer = module.getReferenceSerializer();
    }
 
@@ -103,6 +106,10 @@ public class EMFSerializers extends Serializers.Base {
 
       if (type.isTypeOrSubTypeOf(EObject.class)) {
          return new EObjectSerializer(propertiesBuilder, referenceSerializer);
+      }
+
+      if (type.isTypeOrSubTypeOf(FeatureMap.Entry.class)) {
+         return featureMapEntrySerializer;
       }
 
       return super.findSerializer(config, type, beanDesc);

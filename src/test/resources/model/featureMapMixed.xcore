@@ -1,0 +1,38 @@
+@Ecore(nsURI="http://www.emfjson.org/jackson/featureMapMixed")
+@GenModel(
+    modelDirectory="emfjson-jackson/src/test/java-gen",
+    updateClasspath="false",
+    bundleManifest="false",
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl",
+    complianceLevel="8.0"
+)
+package org.eclipse.emfcloud.jackson.junit.featureMapMixed
+
+import org.eclipse.emf.ecore.EFeatureMapEntry
+import org.eclipse.emf.ecore.EStringToStringMapEntry
+
+@ExtendedMetaData(name="", kind="mixed")
+class DocumentRoot {
+	@ExtendedMetaData(kind="elementWildcard", name=":mixed")
+	EFeatureMapEntry[] mixed
+    @ExtendedMetaData(kind="attribute", name="xmlns:prefix")
+    contains transient EStringToStringMapEntry[] xMLNSPrefixMap
+    @ExtendedMetaData(kind="attribute", name="xsi:schemaLocation")
+    contains transient EStringToStringMapEntry[] xSISchemaLocation
+
+    @ExtendedMetaData(kind="element", name="A", namespace="##targetNamespace")
+    contains transient volatile derived AType[0..?] aElements
+
+    @ExtendedMetaData(kind="element", name="B", namespace="##targetNamespace")
+    contains transient volatile derived BType[0..?] bElements
+}
+
+@ExtendedMetaData(name="AType", kind="elementOnly")
+class AType {
+    id String attributeA
+}
+
+@ExtendedMetaData(name="BType", kind="elementOnly")
+class BType {
+    id String attributeB
+}

@@ -1,0 +1,19 @@
+{
+  "eClass": "http://www.emfjson.org/jackson/featureMapMixed#//DocumentRoot",
+  ":mixed": [
+    {
+      "featureName": "B",
+      "value": {
+        "eClass": "http://www.emfjson.org/jackson/featureMapMixed#//BType",
+        "attributeB": "valueB"
+      }
+    },
+    {
+      "featureName": "A",
+      "value": {
+        "eClass": "http://www.emfjson.org/jackson/featureMapMixed#//AType",
+        "attributeA": "valueA"
+      }
+    }
+  ]
+}

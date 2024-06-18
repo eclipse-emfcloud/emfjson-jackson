@@ -11,14 +11,24 @@
 package org.eclipse.emfcloud.jackson.utils;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+import java.util.WeakHashMap;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.DynamicEObjectImpl.BasicEMapEntry;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.ExtendedMetaData;
+import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emfcloud.jackson.databind.EMFContext;
 
 import com.fasterxml.jackson.databind.DatabindContext;
@@ -98,4 +108,101 @@ public final class EObjects {
       return entry;
    }
 
+   private static final Map<EClass, Optional<EStructuralFeature>> ELEMENT_WILDCARD_CACHE = Collections
+      .synchronizedMap(new WeakHashMap<>());
+   private static final Map<EClass, Optional<EStructuralFeature>> ATTRIBUTE_WILDCARD_CACHE = Collections
+      .synchronizedMap(new WeakHashMap<>());
+
+   /**
+    * Test whether the feature is a map entry feature.
+    *
+    * @param feature to test
+    * @return true when this is a map entry part of another feature
+    */
+   public static boolean isFeatureMapEntry(final EStructuralFeature feature) {
+      if (feature != null) {
+         EAnnotation annotation = feature.getEAnnotation(ExtendedMetaData.ANNOTATION_URI);
+         if (annotation != null) {
+            // a classic grouped feature map entry
+            return annotation.getDetails().containsKey(ExtendedMetaData.FEATURE_KINDS[ExtendedMetaData.GROUP_FEATURE])
+               ||
+               // test for an element feature to be included in a ":mixed" wildcard
+               ExtendedMetaData.INSTANCE.getFeatureKind(feature) == ExtendedMetaData.ELEMENT_FEATURE
+                  && ELEMENT_WILDCARD_CACHE.computeIfAbsent(feature.getEContainingClass(),
+                     EObjects::getElementWildcard).isPresent()
+               ||
+               // test for an attribute feature to be included in a ":mixed" wildcard
+               ExtendedMetaData.INSTANCE.getFeatureKind(feature) == ExtendedMetaData.ATTRIBUTE_FEATURE
+                  && ATTRIBUTE_WILDCARD_CACHE.computeIfAbsent(feature.getEContainingClass(),
+                     EObjects::getAttributeWildcard).isPresent();
+         }
+      }
+      return false;
+   }
+
+   /**
+    * Get the group name for the general feature containing the elements.
+    *
+    * @param featureMapEntry the feature corresponding to an entry in a feature map
+    * @return the name of the group feature corresponding to the whole map
+    */
+   public static String getGroupNameForFeatureMapEntry(final EStructuralFeature featureMapEntry) {
+      // supplies the IllegalArgumentException for features which are not a feature map entry
+      Supplier<IllegalArgumentException> illegal = () -> new IllegalArgumentException(featureMapEntry.getName());
+      EAnnotation annotation = featureMapEntry.getEAnnotation(ExtendedMetaData.ANNOTATION_URI);
+      if (annotation == null) {
+         // this is not a feature map entry
+         throw illegal.get();
+      }
+      String group = annotation.getDetails().get(ExtendedMetaData.FEATURE_KINDS[ExtendedMetaData.GROUP_FEATURE]);
+      return Optional.ofNullable(group)
+         // remove leading # (not ':' in the ":mixed" name)
+         .map(g -> g.startsWith("#") ? g.substring(1) : g)
+         .orElseGet(() -> {
+            // no group entry, we use the ":mixed" wildcard
+            EStructuralFeature wildcard;
+            if (ExtendedMetaData.INSTANCE.getFeatureKind(featureMapEntry) == ExtendedMetaData.ELEMENT_FEATURE) {
+               wildcard = ELEMENT_WILDCARD_CACHE.computeIfAbsent(featureMapEntry.getEContainingClass(),
+                  EObjects::getElementWildcard).orElseThrow(illegal);
+            } else if (ExtendedMetaData.INSTANCE
+               .getFeatureKind(featureMapEntry) == ExtendedMetaData.ATTRIBUTE_FEATURE) {
+               wildcard = ATTRIBUTE_WILDCARD_CACHE.computeIfAbsent(featureMapEntry.getEContainingClass(),
+                  EObjects::getAttributeWildcard).orElseThrow(illegal);
+            } else {
+               // this is not a feature map entry
+               throw illegal.get();
+            }
+            return wildcard.getName();
+         });
+   }
+
+   /**
+    * Test whether the EClass type has an element wildcard (usually ":mixed") and return it.
+    *
+    * @param type the EClass
+    * @return an Optional with the wildcard feature when it exists
+    */
+   private static Optional<EStructuralFeature> getElementWildcard(final EClass type) {
+      // most probably only EAttributes can be wildcards, but let's not take the risk for exotic cases...
+      Stream<EStructuralFeature> featureMapAtts = type.getEAllStructuralFeatures().stream()
+         .filter(FeatureMapUtil::isFeatureMap);
+      return featureMapAtts
+         .filter(r -> ExtendedMetaData.INSTANCE.getFeatureKind(r) == ExtendedMetaData.ELEMENT_WILDCARD_FEATURE)
+         .findFirst();
+   }
+
+   /**
+    * Test whether the EClass type has an attribute wildcard (usually ":mixed") and return it.
+    *
+    * @param type the EClass
+    * @return an Optional with the wildcard feature when it exists
+    */
+   private static Optional<EStructuralFeature> getAttributeWildcard(final EClass type) {
+      // most probably only EAttributes can be wildcards, but let's not take the risk for exotic cases...
+      Stream<EStructuralFeature> featureMapAtts = type.getEAllStructuralFeatures().stream()
+         .filter(FeatureMapUtil::isFeatureMap);
+      return featureMapAtts
+         .filter(r -> ExtendedMetaData.INSTANCE.getFeatureKind(r) == ExtendedMetaData.ATTRIBUTE_WILDCARD_FEATURE)
+         .findFirst();
+   }
 }
