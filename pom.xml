@@ -75,7 +75,7 @@
 		<pluginRepository>
 			<id>sonatype</id>
 			<name>Sonatype</name>
-			<url>https://oss.sonatype.org/content/groups/public</url>
+			<url>https://s01.oss.sonatype.org/content/groups/public</url>
 		</pluginRepository>
 	</pluginRepositories>
 
