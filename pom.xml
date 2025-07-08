@@ -421,12 +421,6 @@ Export-Package: org.eclipse.emfcloud.jackson.*
 		</profile>
 		<profile>
 			<id>m2-release</id>
-			<distributionManagement>
-				<snapshotRepository>
-					<id>ossrh</id>
-					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-				</snapshotRepository>
-			</distributionManagement>
 			<build>
 				<plugins>
 					<!-- To release to Sonatype/Maven central -->
