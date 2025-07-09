@@ -427,6 +427,12 @@ Export-Package: org.eclipse.emfcloud.jackson.*
 		</profile>
 		<profile>
 			<id>m2-release</id>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>central</id>
+					<url>https://central.sonatype.com/repository/maven-snapshots/</url>
+				</snapshotRepository>
+			</distributionManagement>
 			<build>
 				<plugins>
 					<!-- To release to Sonatype/Maven central -->
