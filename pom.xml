@@ -8,11 +8,6 @@
 	<packaging>jar</packaging>
 	<version>2.3.0-SNAPSHOT</version>
 	<name>EMF JSON De-/Serialization using Jackson</name>
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
 
 	<licenses>
 		<license>
