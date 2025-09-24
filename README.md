@@ -35,16 +35,16 @@ The nightly builds are available as maven repository or p2 update site.
 
 ### Maven [![m2-deploy-status](https://img.shields.io/jenkins/build?jobUrl=https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-m2&label=m2-publish)](https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-m2/)
 
-- Snapshots: https://oss.sonatype.org/content/repositories/snapshots/org/eclipse/emfcloud/emfjson-jackson/
-- Releases/RCs: https://oss.sonatype.org/content/repositories/releases/org/eclipse/emfcloud/emfjson-jackson/
+- Snapshots: <https://central.sonatype.com/repository/maven-snapshots/org/eclipse/emfcloud/emfjson-jackson/>
+- Releases/RCs: <https://repo1.maven.org/maven2/org/eclipse/emfcloud/emfjson-jackson/>
 
 To use the Maven artifact add the following dependency to your POM file:
 
 ```xml
 <dependency>
-	<groupId>org.eclipse.emfcloud</groupId>
-	<artifactId>emfjson-jackson</artifactId>
-	<version>...</version>
+ <groupId>org.eclipse.emfcloud</groupId>
+ <artifactId>emfjson-jackson</artifactId>
+ <version>...</version>
 </dependency>
 ```
 
@@ -63,14 +63,14 @@ If you want to consume the nightly builds you have to configure the sonatype sna
 
 ### P2 Update Site [![p2-deploy-status](https://img.shields.io/jenkins/build?jobUrl=https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-p2&label=p2-publish)](https://ci.eclipse.org/emfcloud/job/deploy-emfcloud-emfjson-jackson-p2/)
 
-- Snapshots: https://download.eclipse.org/emfcloud/emfjson-jackson/p2/nightly/
-- Releases/RCs: https://download.eclipse.org/emfcloud/emfjson-jackson/p2/releases/
+- Snapshots: <https://download.eclipse.org/emfcloud/emfjson-jackson/p2/nightly/>
+- Releases/RCs: <https://download.eclipse.org/emfcloud/emfjson-jackson/p2/releases/>
 
-This update sites contain the bundle and feature for emfjson-jackson and Jackson. 
+This update sites contain the bundle and feature for emfjson-jackson and Jackson.
 
 ## Development
 
-Development can be done with any Java IDE (Eclipse, IntelliJ, etc.), it does not require any special tooling except Maven. 
+Development can be done with any Java IDE (Eclipse, IntelliJ, etc.), it does not require any special tooling except Maven.
 
 ```
 git clone https://github.com/emfjson/emfjson-jackson.git
@@ -78,14 +78,14 @@ git clone https://github.com/emfjson/emfjson-jackson.git
 mvn clean verify
 ```
 
-This command will call the `xtext:generate` action that will generate the code from the `Xcore` model for the tests. 
+This command will call the `xtext:generate` action that will generate the code from the `Xcore` model for the tests.
 
 The tests can be run with the maven command: `mvn clean test` (or by running class `TestSuite` from your IDE).
 The tests require some code to be generated from a [Xcore](http://wiki.eclipse.org/Xcore) model.
 This generated code is not included in this repository, but is generated when the sources are first build locally.
 
-
 ## Documentation and Support
+
 You can find documentation on EMF JSON-Jackson in our [wiki page](https://github.com/eclipse-emfcloud/emfjson-jackson/wiki).
 
 If you have questions, please raise them on our [discussions page](https://github.com/eclipse-emfcloud/emfcloud/discussions) and have a look at our [communication and support options](https://www.eclipse.org/emfcloud/contact/).
