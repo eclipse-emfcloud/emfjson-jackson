@@ -6,8 +6,10 @@
 	<groupId>org.eclipse.emfcloud</groupId>
 	<artifactId>emfjson-jackson</artifactId>
 	<packaging>jar</packaging>
-	<version>2.3.0-SNAPSHOT</version>
+	<version>2.3.0</version>
 	<name>EMF JSON De-/Serialization using Jackson</name>
+	<description>EMF JSON De-/Serialization using Jackson</description>
+	<url>https://github.com/eclipse-emfcloud/emfjson-jackson</url>
 
 	<licenses>
 		<license>
