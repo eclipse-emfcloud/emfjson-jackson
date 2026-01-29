@@ -394,7 +394,9 @@ Export-Package: org.eclipse.emfcloud.jackson.*
 						<configuration>
 							<configLocation>emfcloud-checkstyle-8.44.xml</configLocation>
 							<consoleOutput>true</consoleOutput>
-							<excludes>**/src-gen/**/*.java</excludes>
+						    <sourceDirectories>
+						      <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+						    </sourceDirectories>
 						</configuration>
 						<executions>
 							<execution>
