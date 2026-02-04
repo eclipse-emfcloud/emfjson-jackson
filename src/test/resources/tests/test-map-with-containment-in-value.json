@@ -1,0 +1,21 @@
+{
+  "eClass": "http://www.emfjson.org/jackson/model#//ETypes",
+  "stringMapValuesWithContainmentInValue": {
+    "Hello": {
+      "name": "p1",
+      "multipleContainmentReferenceNoProxies": [
+        {
+          "singleAttribute": "c1"
+        }
+	  ]
+    },
+    "World": {
+      "name": "p2",
+      "multipleContainmentReferenceNoProxies":	  [
+        {
+          "singleAttribute": "c2"
+        }
+	  ]
+    }
+  }
+}

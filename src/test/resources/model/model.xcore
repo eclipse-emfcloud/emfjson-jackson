@@ -60,6 +60,7 @@ class ETypes {
 	contains TMap[*] values
 	contains TMapRef[*] valuesWithRef
 	contains StringMap[*] stringMapValues
+	contains StringMapWithContainment[*] stringMapValuesWithContainmentInValue
 	contains DataTypeMap[*] dataTypeMapValues
 	unique URI[] uris
 }
@@ -67,6 +68,11 @@ class ETypes {
 class StringMap wraps Map.Entry {
 	String key
 	contains Value value
+}
+
+class StringMapWithContainment wraps Map.Entry {
+	String key
+	contains PrimaryObject value
 }
 
 class TMap wraps Map.Entry {

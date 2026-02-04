@@ -193,6 +193,61 @@ public class MapTest {
    }
 
    @Test
+   public void testSaveMapWithContainmentInValue() throws IOException {
+      JsonNode expected = mapper.readTree(
+         Paths.get("src/test/resources/tests/test-map-with-containment-in-value.json").toFile());
+
+      Resource resource = resourceSet.createResource(URI.createURI("test"));
+
+      ETypes types = ModelFactory.eINSTANCE.createETypes();
+
+      PrimaryObject p1 = ModelFactory.eINSTANCE.createPrimaryObject();
+      p1.setName("p1");
+      TargetObject c1 = ModelFactory.eINSTANCE.createTargetObject();
+      c1.setSingleAttribute("c1");
+      p1.getMultipleContainmentReferenceNoProxies().add(c1);
+
+      PrimaryObject p2 = ModelFactory.eINSTANCE.createPrimaryObject();
+      p2.setName("p2");
+      TargetObject c2 = ModelFactory.eINSTANCE.createTargetObject();
+      c2.setSingleAttribute("c2");
+      p2.getMultipleContainmentReferenceNoProxies().add(c2);
+
+      types.getStringMapValuesWithContainmentInValue().put("Hello", p1);
+      types.getStringMapValuesWithContainmentInValue().put("World", p2);
+
+      resource.getContents().add(types);
+
+      JsonNode actual = mapper.valueToTree(resource);
+      assertThat(actual).isEqualTo(expected);
+   }
+
+   @Test
+   public void testLoadMapWithContainmentInValue() {
+      Resource resource = resourceSet.getResource(
+         URI.createURI("src/test/resources/tests/test-map-with-containment-in-value.json"),
+         true);
+
+      assertThat(resource.getContents()).hasSize(1);
+      assertThat(resource.getContents().get(0)).isInstanceOf(ETypes.class);
+
+      ETypes types = (ETypes) resource.getContents().get(0);
+
+      EMap<String, PrimaryObject> mapValues = types.getStringMapValuesWithContainmentInValue();
+      assertThat(mapValues).hasSize(2);
+
+      PrimaryObject p1 = mapValues.get("Hello");
+      PrimaryObject p2 = mapValues.get("World");
+
+      assertThat(p1.getName()).isEqualTo("p1");
+      assertThat(p1.getMultipleContainmentReferenceNoProxies().size()).isEqualTo(1);
+      assertThat(p1.getMultipleContainmentReferenceNoProxies().get(0).getSingleAttribute()).isEqualTo("c1");
+      assertThat(p2.getName()).isEqualTo("p2");
+      assertThat(p2.getMultipleContainmentReferenceNoProxies().size()).isEqualTo(1);
+      assertThat(p2.getMultipleContainmentReferenceNoProxies().get(0).getSingleAttribute()).isEqualTo("c2");
+   }
+
+   @Test
    public void testSaveMapWithDataTypeKey() {
       JsonNode expected = mapper.createObjectNode()
          .put("eClass", "http://www.emfjson.org/jackson/model#//ETypes")
