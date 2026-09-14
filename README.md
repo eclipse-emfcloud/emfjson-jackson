@@ -6,6 +6,10 @@
 
 EMF JSON-Jackson provides a [JSON](https://www.json.org/) binding for [EMF (Eclipse Modeling Framework)](http://www.eclipse.org/emf) using [Jackson](https://github.com/FasterXML/jackson), that allows serialization and deserialization of EMF Resources in JSON.
 
+> [!IMPORTANT]
+> EMF JSON-Jackson is a library that is embedded into an application which controls its own input and supplies its own EMF configuration.
+> See [Intended Use, Integration, and Security Considerations](./docs/integration.md) before processing models from untrusted sources.
+
 > IMPORTANT:
 > This projects was originally hosted by [emfjson/emfjson-jackson](https://github.com/emfjson/emfjson-jackson) and was moved to Eclipse in 2021.
 > Due to the move several names (packages, bundle, groupId, artifactId) were adapted and a new version of the p2 bundles and the maven artifacts was released.
